@@ -1,0 +1,13 @@
+.pool__actions {
+  justify-content: space-between;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.pool__buttons > :nth-child(1) {
+  margin-right: 15px;
+}
+
+.pool__timeframes {
+  height: 38px;
+}

@@ -1,0 +1,105 @@
+.card__title--settings {
+  align-items: center;
+}
+
+.card__title--settings h4 {
+  text-align: center;
+  display: block;
+  width: 100%;
+  pointer-events: none;
+}
+
+.card__title--settings svg {
+  height: 100%;
+  width: 12px;
+  margin-right: -12px;
+  cursor: pointer;
+}
+
+.settings__option:not(:last-child) {
+  margin-bottom: 10px;
+}
+
+.settings__option {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  background: #fff;
+  border-radius: 25px;
+}
+
+.settings__option--max {
+  flex-direction: column;
+  align-items: start;
+}
+
+.settings__option .selector {
+  display: inline-flex;
+}
+
+.settings__option span {
+  margin-left: 10px;
+  user-select: none;
+}
+
+.settings__option--max h5 {
+  margin-bottom: 10px;
+}
+
+.settings__option input {
+  min-height: 30px;
+  height: 100%;
+  width: 75px;
+  padding: 3px 14px;
+  border-radius: 18px;
+  border: solid 1px #E7E7E7;
+
+  background: none;
+  outline: none;
+
+  font-size: 16px;
+  text-align: end;
+}
+
+.settings__option input::-webkit-outer-spin-button,
+.settings__option input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.settings__option input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.settings__option input:focus {
+  border-color: var(--accent);
+}
+
+.settings__option h5 {
+  font-size: 16px;
+  opacity: 0.5;
+  user-select: none;
+}
+
+.settings_option__props {
+  align-items: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .settings__option .selector__options {
+    background: rgb(15, 18, 28);  
+  }
+
+  .settings__option .selector__selected {
+    background: rgb(38, 43, 69);
+  }
+
+  .settings__option {
+    background: rgb(21, 24, 39);
+  }
+
+  .settings__option input {
+    border: solid 1px rgb(21, 24, 39);
+  }
+}

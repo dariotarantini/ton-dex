@@ -1,0 +1,60 @@
+.selector {
+  position: relative;
+}
+
+.selector__options {
+  position: relative;
+  background: rgba(48, 55, 87, 0.04);
+  border-radius: 20px;
+  padding: 4px;
+}
+
+.selector__option {
+  user-select: none;
+  cursor: pointer;
+  padding: 3px 14px;
+  z-index: 10;
+  opacity: 0.5;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.selector__option--selected {
+  opacity: 1;
+}
+
+.selector__option--element {
+  padding: 0;
+}
+
+.selector__option:not(:last-child) {
+  margin-right: 10px;
+}
+
+.selector__selected {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  z-index: 9;
+  border-radius: 15px;
+  background: #fff;
+  box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.selector--animating .selector__selected {
+  transition: .25s;
+}
+
+.selector--animating .selector__option {
+  transition: opacity .25s;
+}
+
+@media (prefers-color-scheme: dark) {
+  .selector__options {
+    background: #081a24;
+  }
+
+  .selector__selected {
+    background: #0b3b53;
+  }
+}

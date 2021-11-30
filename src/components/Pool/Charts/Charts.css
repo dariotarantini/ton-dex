@@ -1,0 +1,14 @@
+.pool__charts {
+  flex-direction: row;
+}
+
+.pool__chart_selector {
+  flex-direction: column;
+}
+
+.pool__chart {
+  flex: 1;
+  margin-left: 20px;
+  border-radius: 20px;
+  padding: 20px;
+}

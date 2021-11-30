@@ -1,0 +1,7 @@
+.transactions {
+  flex-direction: column;
+}
+
+.pool__transactions_selector {
+  margin-left: -10px;
+}

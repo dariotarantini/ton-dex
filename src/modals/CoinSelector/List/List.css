@@ -1,0 +1,25 @@
+.coin_selector__coinlist {
+  flex-direction: column;
+  width: 100%;
+}
+
+.coin_selector__tabs .selector__option {
+  display: block;
+  text-align: center;
+  flex: 1;
+}
+
+.coin_selector__tabs {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.coin_selector__tab {
+  flex-direction: column;
+  width: 100%;
+}
+
+.coin_selector__tabs > .selector,
+.coin_selector__tabs .selector__options {
+  width: 100%;
+}

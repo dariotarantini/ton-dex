@@ -1,0 +1,33 @@
+.transaction_details {
+  position: relative;
+  align-items: center;
+  justify-content: flex-end;
+  
+  padding-right: 15px;
+  margin: 10px 0;
+
+  user-select: none;
+}
+
+.transaction__info svg * {
+  stroke: #fff;
+  opacity: 0.5;
+}
+
+span {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+}
+
+span.transaction__fiat {
+  opacity: 0.35;
+  margin-left: 5px;
+}
+
+span.transaction__info {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}

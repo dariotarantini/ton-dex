@@ -1,0 +1,13 @@
+img.coin__icon {
+  width: 100%;
+  height: 100%;
+  border: 5px solid #FFFFFF;
+  border-radius: 50%;
+  user-select: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  img.coin__icon {
+    border-color: #000;
+  }
+}

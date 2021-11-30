@@ -1,0 +1,26 @@
+.pool__price_card {
+  flex-direction: column;
+  padding: 15px 20px;
+  border-radius: 20px;
+}
+
+.pool_price__rate {
+  align-items: center;
+}
+
+.pool_price__rate:nth-child(1) {
+  margin-bottom: 10px;
+}
+
+.pool_price__rate > img {
+  width: 18px;
+  height: 18px;
+  border: none;
+  margin-right: 5px;
+  user-select: none;
+}
+
+.pool_price__rate > span {
+  opacity: 0.85;
+  line-height: 20px;
+}

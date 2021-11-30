@@ -1,0 +1,12 @@
+.swap_form--loading,
+.swap_form--loading * {
+  pointer-events: none;
+}
+
+.swap_form--loading > *:not(.action__buttons) {
+  opacity: 0.7;
+}
+
+.swap__buttons {
+  height: 50px;
+}

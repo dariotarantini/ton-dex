@@ -1,0 +1,17 @@
+.add_liquidity_confirmation__info {
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px;
+  padding-bottom: 5px;
+}
+
+.add_liquidity_confirmation__info h1 {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.add_liquidity_confirmation__info span {
+  font-weight: 600;
+  opacity: 0.75;
+  margin-top: 5px;
+}

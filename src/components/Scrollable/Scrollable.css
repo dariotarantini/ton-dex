@@ -1,0 +1,18 @@
+.scrollable {
+  display: block !important;
+  position: relative;
+  margin-right: -20px;
+  padding-right: 20px;
+  height: 100%;
+
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.scrollable__wrapper {
+  display: block !important;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}

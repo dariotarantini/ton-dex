@@ -1,0 +1,109 @@
+.coin__selector {
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 75px;
+
+  background: #fff;
+  border-radius: 25px;
+  padding: 0 20px;
+
+  overflow: hidden;
+  user-select: none;
+}
+
+.coin__selector input {
+  width: 100%;
+  text-align: end;
+  padding-left: 20px;
+  border: none;
+  outline: none;
+
+  font-size: 24px;
+  line-height: 24px;
+  font-weight: 700;
+  background: transparent;
+}
+
+.coin_selector__coin {
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.coin_selector__coin > span {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 100%;
+  white-space: nowrap;
+
+  margin-left: -5px;
+  margin-top: 3px;
+  margin-bottom: 5px;
+
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.coin_selector__coin > span:hover {
+  opacity: 0.6;
+}
+
+.coin__selected {
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: 15px;
+}
+
+.coin__selected img {
+  width: 32px;
+  height: 32px;
+  border: none;
+  margin-right: 15px;
+}
+
+.coin__selected span {
+  font-size: 24px;
+  line-height: 24px;
+}
+
+.coin__selected svg {
+  margin-top: 3px;
+  margin-left: 10px;
+}
+
+.coin__selected--small {
+  padding: 6px 9px;
+  margin-left: -11px;
+}
+
+.coin__selected--small:hover {
+  background: rgba(0, 0, 0, .03);
+}
+
+.coin__selected--small span {
+  font-size: 18px;
+}
+
+.coin__selected--small img {
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+}
+
+.coin__selected svg {
+  width: 12px;
+  margin-top: 2px;
+  margin-left: 10px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .coin__selector {
+    background: rgb(16, 19, 31);
+  }
+
+  .coin__selected--small:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}

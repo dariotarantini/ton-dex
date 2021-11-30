@@ -1,0 +1,88 @@
+.pair_input {
+  flex-direction: column;
+  width: 100%;
+}
+
+.pair_input__arrow_wrapper {
+  position: relative;
+  height: 10px;
+  width: 100%;
+}
+
+.pair_input__arrow_wrapper::after,
+.pair_input__arrow_wrapper::before {
+  content: ' ';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.pair_input__arrow_wrapper::before {
+  border: solid 1px #F0F0F0;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  z-index: 1;
+}
+
+.pair_input__arrow_wrapper::after {
+  background: #fafafa;
+  z-index: 2;
+  width: 100%;
+  height: 10px;
+}
+
+.pair_input__arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  
+  background: #fff;
+  border: solid 3px #fafafa;
+  border-radius: 50%;
+  z-index: 10;
+}
+
+.pair_input__arrow svg {
+  transform: rotate(-90deg);
+}
+
+.pair_input__arrow svg * {
+  transition: .1s;
+  fill: #E8E8E8;
+}
+
+.pair_input__arrow:hover svg * {
+  fill: #c4c4c4;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pair_input__arrow {
+    border-color: rgb(6, 7, 12);
+    background: rgb(16, 19, 31);
+  }
+
+  .pair_input__arrow_wrapper::after {
+    background: rgb(10, 11, 19);
+  }
+
+  .pair_input__arrow_wrapper::before {
+    border-color: rgb(10, 11, 19);
+  }
+
+  .pair_input__arrow svg * {
+    fill: rgb(37, 47, 87);
+  }
+  
+  .pair_input__arrow:hover svg * {
+    fill: rgb(42, 55, 105);
+  }
+}

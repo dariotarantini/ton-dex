@@ -1,0 +1,60 @@
+.modal_coin_selector__coin {
+  width: 100%;
+  flex-direction: column;
+}
+
+.modal_coin_selector__common {
+  display: block !important;
+  margin-bottom: 30px;
+}
+
+.modal_coin_selector__suggestion {
+  display: inline-flex !important;
+  align-items: center;
+
+  padding: 1px 8px;
+  border-radius: 20px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+
+  background: #F8F8F8;
+  border: solid 1px #F0F0F0;
+
+  user-select: none;
+  cursor: pointer;
+}
+
+.modal_coin_selector__suggestion--selected {
+  border-color: var(--accent);
+  background: rgba(0, 136, 204, 0.1);
+}
+
+.modal_coin_selector__suggestion--disallowed {
+  border-color: #dddddd;
+  background: #ececec;
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.modal_coin_selector__suggestion img {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  border-width: 2px;
+}
+
+.modal_coin_selector__suggestion span {
+  font-size: 14px;
+  line-height: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal_coin_selector__suggestion:not(.modal_coin_selector__suggestion--selected) {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+  }
+
+  .modal_coin_selector__suggestion--selected {
+    background: rgba(0, 136, 204, 0.25);
+  }
+}
