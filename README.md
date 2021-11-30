@@ -4,7 +4,7 @@
 
 ## TODO:
 - responsive markup
-- remove liquidity page
+- add "remove liquidity" page
 - finish pool list
 - add charts
 - create error modal
