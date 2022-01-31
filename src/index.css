@@ -1,14 +1,21 @@
 :root {
   --accent: #0088CC;
   --accent-dark: rgba(48, 55, 87, 1);
+  --danger: #F22222;
 }
 
-html, body, #root, main {
+html, body, #root {
   height: 100%;
+  overflow-x: hidden;
+  min-width: 375px;
 }
 
-.modal *:not(span):not(button),
-.App *:not(span):not(h4) {
+main {
+  min-height: 100%;
+}
+
+.modal *:not(.no_flex):not(span):not(button),
+.App *:not(.no_flex):not(span):not(h4):not(a) {
   display: flex;
 }
 
@@ -21,9 +28,10 @@ body.no-scroll {
 }
 
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+
   font-family: 'Mulish', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -31,6 +39,8 @@ body.no-scroll {
   -moz-osx-font-smoothing: grayscale;
   color: var(--accent-dark);
   font-weight: 600;
+
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 .page {
@@ -41,19 +51,69 @@ body.no-scroll {
 
 .page.page--centered {
   max-width: 400px;
-  height: 100%;
+
+  align-self: center;
+
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding-bottom: 142px;
+
+  margin-top: -142px;
+}
+
+.page.page--error {
+  padding-top: 75px;
+  align-items: center;
+  flex-direction: column;
+}
+
+.page.page--error > .page__content {
+  flex-direction: column;
+  align-items: center;
+}
+
+.page.page--error > .page__content svg {
+  margin-bottom: 50px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.page.page--error .page_error__text {
+  flex-direction: column;
+  align-items: center;
+  max-width: 200px;
+}
+
+.page.page--error .page_error__text h2 {
+  font-weight: 700;
+}
+
+.page.page--error .page_error__text h2 ~ p {
+  opacity: 0.6;
+}
+
+.page.page--error .page_error__text p,
+.page.page--error .page_error__text h2 {
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.page.page--error .page_error__text button {
+  margin-top: 15px;
 }
 
 .card {
   flex-direction: column;
-  width: 400px;
+  width: 100%;
+  max-width: 400px;
   border-radius: 35px;
   padding: 14px 13px;
+  gap: 10px;
   background: #fafafa;
+}
+
+.card.card--no-gap {
+  gap: 0;
 }
 
 .card__title {
@@ -61,7 +121,7 @@ body.no-scroll {
   justify-content: space-between;
   padding: 0 25px;
   width: 100%;
-  margin-bottom: 25px;
+  margin-bottom: 15px;
 }
 
 .card__title h4 {
@@ -78,6 +138,29 @@ body.no-scroll {
 
 .card__title svg.cog:hover {
   opacity: 0.25;
+}
+
+.card__content {
+  flex-direction: column;
+  padding: 15px 20px;
+  border-radius: 25px;
+  background: #fff;
+}
+
+.card__info {
+  flex-direction: column;
+  padding: 15px;
+  gap: 5px;
+}
+
+.card_info__prop {
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.card_info__prop span.card_info__title {
+  opacity: 0.5;
 }
 
 .border_separator {
@@ -103,8 +186,13 @@ button {
   font-size: 16px;
   line-height: 24px;
 
+  user-select: none;
   cursor: pointer;
   transition: .1s;
+}
+
+button.btn--danger {
+  background: var(--danger);
 }
 
 button:hover {
@@ -117,8 +205,17 @@ button.btn--secondary {
   color: var(--accent);
 }
 
+button.btn--secondary.btn--danger {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
 button.btn--secondary:hover {
   background: rgba(0, 136, 204, 0.05);
+}
+
+button.btn--secondary.btn--danger:hover {
+  background: #f2222205;
 }
 
 button.btn--disabled {
@@ -143,30 +240,41 @@ button.btn--trinary {
   color: var(--accent);
 }
 
+button.btn--trinary.btn--danger {
+  color: var(--danger);
+}
+
 button.btn--trinary:hover {
   color: var(--accent-dark);
 }
 
-.action__buttons {
+button.btn--inline {
+  display: inline;
+  padding: 0 5px;
+  line-height: inherit;
+  font-size: inherit;
+}
+
+.card__action_buttons {
   height: 50px;
 }
 
-.action__buttons--no-pool {
+.card__action_buttons--no-pool {
   margin-top: 15px;
 }
 
-.action__buttons button {
+.card__action_buttons button {
   border-radius: 25px;
   justify-content: center;
   align-items: center;
   flex: 1;
 }
 
-.action__buttons button span {
+.card__action_buttons button span {
   color: currentColor;
 }
 
-.action__buttons button .loader__circle {
+.card__action_buttons button .loader__circle {
   margin-right: 10px;
   width: 20px;
   height: 20px;
@@ -184,6 +292,7 @@ input[type=number] {
 
 .link,
 a {
+  display: inline;
   color: var(--accent);
   text-decoration: none;
   border-bottom: 2px solid transparent;
@@ -197,6 +306,7 @@ h3 {
   font-weight: 900;
   font-size: 45px;
   line-height: 56px;
+  margin: 25px 0;
 }
 
 h4 {
@@ -256,20 +366,8 @@ h4 {
   line-height: 100%;
 }
 
-.confirmation__field span.title {
+.confirmation__field span.confirmation_details__title {
   opacity: 0.5;
-}
-
-.confirmation__buttons {
-  height: 50px;
-  width: 100%;
-}
-
-.confirmation__buttons button {
-  width: 100%;
-  height: 100%;
-  border-radius: 25px;
-  text-align: center;
 }
 
 .confirmation__loading {
@@ -297,6 +395,11 @@ h4 {
   border-bottom-color: transparent;
 }
 
+.loader__circle.loader__circle--big {
+  width: 40px;
+  height: 40px;
+}
+
 @keyframes loading {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
@@ -307,53 +410,84 @@ h4 {
   100% { opacity: 1 }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --accent: #006ea5;
+@media screen and (max-width: 700px) {
+  .page {
+    padding: 0;
   }
 
-  .confirmation svg * {
-    fill: rgb(37, 47, 87);
+  h3 {
+    font-size: 24px;
+    margin: 30px 0 5px;
   }
+}
 
-  .confirmation__details {
-    background: rgb(18, 22, 42);
-  }
+/* DARK MODE */
 
-  path.logo_stroke {
-    stroke: #ddedf5;
-  }
+html.dark_mode:root {
+  --accent: #006ea5;
+  --danger: #ad1919;
+}
 
-  html, body {
-    background: #000;
-  }
+html.dark_mode,
+html.dark_mode body {
+  background: #000;
+}
 
-  * {
-    color: #ddedf5;
-  }
+html.dark_mode * {
+  color: #ddedf5;
+}
 
-  .card {
-    background: rgb(6, 7, 12);
-  }
+html.dark_mode a {
+  color: var(--accent);
+}
 
-  .card__title svg * {
-    fill: #ffffff;
-  }
+html.dark_mode .confirmation__details {
+  background: rgb(18, 22, 42);
+}
 
-  .card__title svg.cog {
-    opacity: 0.3;
-  }
+html.dark_mode path.logo_stroke {
+  stroke: #ddedf5;
+}
 
-  .card__title svg.cog:hover {
-    opacity: 0.4;
-  }
+html.dark_mode .card {
+  background: rgb(6, 7, 12);
+}
 
-  .card__title svg.cog * {
-    fill: none;
-    stroke: #fff;
-  }
+html.dark_mode .card__title svg * {
+  fill: #ffffff;
+}
 
-  .border_separator {
-    border-color: rgb(22, 24, 43);
-  }
+html.dark_mode .card__title svg.cog {
+  opacity: 0.3;
+}
+
+html.dark_mode .card__title svg.cog:hover {
+  opacity: 0.4;
+}
+
+html.dark_mode .card__title svg.cog * {
+  fill: none;
+  stroke: #fff;
+}
+
+html.dark_mode .card__content {
+  background: rgb(21, 24, 39);
+}
+
+html.dark_mode .border_separator {
+  border-color: rgb(22, 24, 43);
+}
+
+html.dark_mode button.btn--secondary,
+html.dark_mode button.btn--trinary {
+  color: var(--accent);
+}
+
+html.dark_mode button.btn--danger.btn--secondary,
+html.dark_mode button.btn--danger.btn--trinary {
+  color: var(--danger);
+}
+
+html.dark_mode button.btn--trinary:hover {
+  color: #006ea5;
 }

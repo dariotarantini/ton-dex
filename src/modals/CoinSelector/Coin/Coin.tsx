@@ -7,6 +7,8 @@ import ICoin from '../../../api/types/ICoin';
 import CoinIcon from '../../../components/CoinIcon/Coinlcon';
 import Scrollable from '../../../components/Scrollable/Scrollable';
 
+import useMobile from '../../../hooks/useMobile';
+
 import './Coin.css';
 
 type props = {
@@ -36,9 +38,15 @@ export default function Coin({
 }: props) {
   const [query, setQuery] = useState<string>('');
 
+  const isMobile = useMobile();
+
   const searchRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => searchRef.current?.focus(), [])
+  useEffect(() => {
+    if (isMobile) return;
+    searchRef.current?.focus();
+    // eslint-disable-next-line
+  }, [])
   
   function isAllowed(c: ICoin): boolean {
     if (typeof disallowed === 'undefined') return true;
@@ -50,45 +58,37 @@ export default function Coin({
     return true;
   }
 
-  function renderSuggestions(list: ICoin[]) {
-    return (
-      <div className="modal_coin_selector__common">{
-        list.map((c, i) => (
-          <div
-            key={i}
-            onClick={() => isAllowed(c) ? select(c) : undefined}
-            className={
-              'modal_coin_selector__suggestion' +
-              (c.contract === selected?.contract ? ' modal_coin_selector__suggestion--selected' : '') +
-              (!isAllowed(c) ? ' modal_coin_selector__suggestion--disallowed' : '')
-            }
-          >
-            <CoinIcon coin={c} />
-            <span>{c.ticker}</span>
-          </div>
-        ))
-      }</div>
-    );
-  }
+  const renderSuggestions = () => suggestions?.map((c, i) => (
+    <div
+      key={i}
+      onClick={() => isAllowed(c) ? select(c) : undefined}
+      className={
+        'modal_coin_selector__suggestion' +
+        (c.contract === selected?.contract ? ' modal_coin_selector__suggestion--selected' : '') +
+        (!isAllowed(c) ? ' modal_coin_selector__suggestion--disallowed' : '')
+      }
+    >
+      <CoinIcon coin={c} />
+      <span>{c.ticker}</span>
+    </div>
+  ));
 
-  function renderCoinList(list: ICoin[]) {
-    return list.map((c, i) => (
-      <div
-        key={i}
-        className={
-          'modal_coin_selector__item' +
-          (c.contract === selected?.contract ? ' modal_coin_selector__item--selected' : '') +
-          (!isAllowed(c) ? ' modal_coin_selector__item--disallowed' : '')
-        }
-        onClick={() => (isAllowed(c) && c.contract !== selected?.contract) ? select(c) : undefined}
-      >
-        <CoinIcon coin={c} />
-        <span>{c.ticker}</span>
-      </div>
-    ));
-  }
+  const renderCoinList = (list: ICoin[]) => list.map((c, i) => (
+    <div
+      key={i}
+      className={
+        'modal_coin_selector__item' +
+        (c.contract === selected?.contract ? ' modal_coin_selector__item--selected' : '') +
+        (!isAllowed(c) ? ' modal_coin_selector__item--disallowed' : '')
+      }
+      onClick={() => (isAllowed(c) && c.contract !== selected?.contract) ? select(c) : undefined}
+    >
+      <CoinIcon coin={c} />
+      <span>{c.ticker}</span>
+    </div>
+  ));
 
-  function renderSearchResults(list: ICoin[]) {
+  const renderSearchResults = () => {
     const filtered = coinList.filter(c => (
       c.ticker.toLowerCase().search(query.toLowerCase()) !== -1
       || c.contract.toLowerCase().search(query.toLowerCase()) !== -1
@@ -138,12 +138,16 @@ export default function Coin({
               suggestions
                 && suggestions.length > 0
                 && query === ''
-            ) ? renderSuggestions(suggestions) : ''
+            ) ? (
+              <div className="modal_coin_selector__common">
+                {renderSuggestions()}
+              </div>
+            ) : null
           }
           {
             query === ''
               ? renderCoinList(coinList)
-              : renderSearchResults(coinList)
+              : renderSearchResults()
           }
         </Scrollable>
       </div>

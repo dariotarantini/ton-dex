@@ -16,17 +16,30 @@
   cursor: pointer;
 }
 
-.settings__option:not(:last-child) {
-  margin-bottom: 10px;
+.settings__options {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 2px;
 }
 
 .settings__option {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+
   padding: 15px 20px;
+  width: 100%;
+
   background: #fff;
-  border-radius: 25px;
+}
+
+.settings__option:first-child {
+  border-radius: 25px 25px 0 0;
+}
+
+.settings__option:last-child {
+  border-radius: 0 0 25px 25px;
 }
 
 .settings__option--max {
@@ -48,7 +61,6 @@
 }
 
 .settings__option input {
-  min-height: 30px;
   height: 100%;
   width: 75px;
   padding: 3px 14px;
@@ -86,20 +98,20 @@
   align-items: center;
 }
 
-@media (prefers-color-scheme: dark) {
-  .settings__option .selector__options {
-    background: rgb(15, 18, 28);  
-  }
+/* DARK MODE */
 
-  .settings__option .selector__selected {
-    background: rgb(38, 43, 69);
-  }
+html.dark_mode .settings__option .selector__options {
+  background: rgb(15, 18, 28);  
+}
 
-  .settings__option {
-    background: rgb(21, 24, 39);
-  }
+html.dark_mode .settings__option .selector__selected {
+  background: rgb(38, 43, 69);
+}
 
-  .settings__option input {
-    border: solid 1px rgb(21, 24, 39);
-  }
+html.dark_mode .settings__option {
+  background: rgb(21, 24, 39);
+}
+
+html.dark_mode .settings__option input {
+  border: solid 1px rgb(21, 24, 39);
 }

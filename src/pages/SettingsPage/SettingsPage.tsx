@@ -2,21 +2,24 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import Selector from '../../components/Selector/Selector';
-
-import { ReactComponent as ArrowFull } from '../../assets/icons/arrow_full.svg';
-
 import {
   selectSlippage,
   selectDeadline,
   setSlippage,
-  setDeadline
+  setDeadline,
+  selectTheme,
+  Theme,
+  setTheme
 } from '../../store/reducers/settingsReducer';
+
+import Selector from '../../components/Selector/Selector';
+
+import { ReactComponent as ArrowFull } from '../../assets/icons/arrow_full.svg';
 
 import './SettingsPage.css';
 
-function getSelectorId(slippage: number) {
-  switch(slippage) {
+const getSelectorId = (slippage: number) => {
+  switch (slippage) {
     case 0.1:
       return 0;
     case 0.5:
@@ -28,9 +31,22 @@ function getSelectorId(slippage: number) {
   }
 }
 
+const getThemeIndex = (theme: Theme) => {
+  switch (theme) {
+    case Theme.LIGHT:
+      return 0;
+    case Theme.DARK:
+      return 1;
+    case Theme.AUTO:
+    default:
+      return 2;
+  }
+}
+
 export default function SettingsPage() {
-  const slippage = useAppSelector<number>(selectSlippage);
-  const deadline = useAppSelector<number>(selectDeadline);
+  const slippage = useAppSelector(selectSlippage);
+  const deadline = useAppSelector(selectDeadline);
+  const theme = useAppSelector(selectTheme);
 
   const [selectedSlippage, setSelectedSlippage] = useState<number>(getSelectorId(slippage));
 
@@ -75,49 +91,73 @@ export default function SettingsPage() {
       </div>
 
       <div className="card border_separator">
+        <div className="settings__options">
 
-        <div className="settings__option settings__option--max">
-          <h5>Slippage tolerance</h5>
+          <div className="settings__option settings__option--max">
+            <h5>Slippage tolerance</h5>
 
-          <div className="settings_option__props">
-            <Selector
-              selected={selectedSlippage}
-              updater={setSelectedSlippage}
-              options={[
-                '0.1',
-                '0.5',
-                '1',
-                (
-                  <input
-                    type="number"
-                    min="0"
-                    max="100"
-                    step="0.01"
-                    value={slippage}
-                    onChange={e => dispatch(setSlippage(parseFloat(e.target.value)))}
-                  />
-                )
-              ]}
-            />
-            <span>%</span>
+            <div className="settings_option__props">
+              <Selector
+                selected={selectedSlippage}
+                updater={setSelectedSlippage}
+                options={[
+                  '0.1',
+                  '0.5',
+                  '1',
+                  (
+                    <input
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      value={slippage}
+                      onChange={e => dispatch(setSlippage(parseFloat(e.target.value)))}
+                    />
+                  )
+                ]}
+              />
+              <span>%</span>
+            </div>
           </div>
-        </div>
 
-        <div className="settings__option">
-          <h5>Deadline</h5>
-          <div className="settings_option__props">
-            <input
-              type="number"
-              min="0"
-              value={deadline}
-              onChange={e => dispatch(setDeadline(parseFloat(e.target.value)))}
-            />
-            <span>minute{deadline % 10 !== 1 ? 's' : ' '}</span>
+          <div className="settings__option">
+            <h5>Deadline</h5>
+            <div className="settings_option__props">
+              <input
+                type="number"
+                min="0"
+                value={deadline}
+                onChange={e => dispatch(setDeadline(parseFloat(e.target.value)))}
+              />
+              <span>minute{deadline % 10 !== 1 ? 's' : ' '}</span>
+            </div>
           </div>
-        </div>
 
+          <div className="settings__option">
+            <h5>Theme</h5>
+            <div className="settings_option__props">
+              <Selector
+                options={['Light', 'Dark', 'Auto']}
+                selected={getThemeIndex(theme)}
+                updater={(i: number) => {
+                  switch (i) {
+                    case 0:
+                      dispatch(setTheme(Theme.LIGHT));
+                      break;
+                    case 1:
+                      dispatch(setTheme(Theme.DARK));
+                      break;
+                    case 2:
+                    default:
+                      dispatch(setTheme(Theme.AUTO));
+                  }
+                }}
+              />
+            </div>
+          </div>
+
+        </div>
       </div>
-
     </div>
   );
 }

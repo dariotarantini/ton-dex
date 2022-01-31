@@ -28,15 +28,6 @@
   width: auto !important;
 }
 
-.table__col--right > .table__col::before {
-  position: absolute;
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-right: auto;
-  margin-left: 7px;
-}
-
 .table__col.table__col--title {
   width: 100%;
   height: 100%;
@@ -45,25 +36,26 @@
   cursor: pointer;
 }
 
-.table__col.table__col--title::before {
-  content: ' ';
-  width: 11px;
-  height: 8px;
-  background: url('../../assets/icons/arrow.svg') no-repeat center;
+.table__col.table__col--title svg {
   margin-right: 7px;
   opacity: 0;
   transition: opacity .1s;
 }
 
-.table__col:hover.table__col--title::before {
+.table__col--right .table__col.table__col--title svg {
+  margin-right: 0;
+  margin-left: 7px;
+}
+
+.table__col:hover.table__col--title svg {
   opacity: 1;
 }
 
-.table__col.table__col--sorted::before {
+.table__col.table__col--sorted svg {
   opacity: 1;
 }
 
-.table__col.table__col--sorted.table__col--reverse::before {
+.table__col.table__col--sorted.table__col--reverse svg {
   transform: rotate(180deg);
 }
 
@@ -71,26 +63,11 @@
   justify-content: flex-start;
 }
 
-@media screen and (max-width: 925px) {
-  .table__col:not(.table__col--mobile) {
-    display: none;
-  }
-
-  .table__col--mobile > .table__col {
-    display: flex;
-  }
-
-  .table__col.table__col--mobile {
-    flex: 1;
-  }
-}
-
 .table__pages {
   width: 100%;
   align-items: center;
   justify-content: center;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin: 50px 0;
 }
 
 .table_page__arrow {
@@ -119,4 +96,38 @@ span.table__page {
   font-size: 18px;
   line-height: 24px;
   margin: 0 15px;
+}
+
+@media screen and (max-width: 700px) {
+  .table__link {
+    border-bottom: transparent;
+  }
+  
+  .table__link:hover {
+    text-decoration: underline;
+  }
+  
+  .table__pages {
+    margin: 25px 0;
+  }
+}
+
+@media screen and (max-width: 925px) {
+  .table__col:not(.table__col--mobile) {
+    display: none !important;
+  }
+  
+  .table__col--mobile > .table__col {
+    display: flex !important;
+  }
+  
+  .table__col.table__col--mobile {
+    flex: 1;
+  }
+}
+
+/* DARK MODE */
+
+html.dark_mode .table_page__arrow.table_page__arrow--grey > svg path {
+  fill: #fff;
 }

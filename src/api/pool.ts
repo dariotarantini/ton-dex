@@ -1,8 +1,10 @@
+import type IPair from "./types/IPair";
+import type IPool from "./types/IPool";
+import type IPosition from "./types/IPosition";
+import type ITransaction from "./types/ITransaction";
+
 import { store } from "../store/store";
-import IPair from "./types/IPair";
-import IPool from "./types/IPool";
-import IPosition from "./types/IPosition";
-import ITransaction from "./types/ITransaction";
+
 import TransactionType from "./types/TransactionType";
 
 /**
@@ -28,12 +30,26 @@ export async function getPriceImpact(pool: IPool, fromAmount: number): Promise<n
  * @returns {string} pool contract
  */
 export async function getPoolContract(fromContract?: string, toContract?: string) {
-  if (!(
-    (fromContract === 'toncoin' && toContract === 'dai')
-    || (fromContract === 'dai' && toContract === 'toncoin')
-  )) throw new Error('pool not found');
+  if (fromContract === 'toncoin') {
+    if (toContract === 'dai') {
+      return 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCAvWFxVJP80D';
+    } 
 
-  return 'poolcontract1';
+    if (toContract === 'usdt') {
+      return 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCFvWFxVJP809';
+    }
+  }
+
+  if (fromContract === 'dai' && toContract === 'toncoin') {
+    return 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCAvWFxVJP80D';
+  }
+
+  if (fromContract === 'usdt' && toContract === 'toncoin') {
+    return 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCFvWFxVJP809';
+  }
+
+  throw new Error('pool not found');
+
 }
 
 /**
@@ -45,10 +61,56 @@ export async function getPoolContract(fromContract?: string, toContract?: string
  * @returns {IPool}
  */
 export async function getPool(contract: string): Promise<IPool> {
-  if (contract !== 'poolcontract1') throw new Error('pool not found');
+  if (!(
+    contract === 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCAvWFxVJP80D'
+    || contract === 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCFvWFxVJP809'
+  )) throw new Error('pool not found');
+
+  if (contract === 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCFvWFxVJP809') {
+    return {
+      contract: 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCFvWFxVJP809',
+      fee: 0.05,
+      locked: {
+        from: 4_653_334,
+        to: 4_653_334
+      },
+      info: {
+        volume: {
+          value: 86_200_000,
+          change: 4.32
+        },
+        tvl: {
+          change: -0.01,
+          value: 871_260_000
+        },
+        fees: {
+          value: 5_150_000,
+          change: 1.84
+        },
+      },
+      pair: {
+        rate: {
+          forward: 3.74,
+          backward: 1 / 3.74
+        },
+        from: {
+          ticker: 'TONCOIN',
+          icon: '',
+          decimals: 9,
+          contract: 'toncoin'
+        },
+        to: {
+          ticker: 'USDT',
+          icon: '',
+          decimals: 9,
+          contract: 'usdt'
+        }
+      }
+    };
+  }
 
   const pool = {
-    contract: 'poolcontract1',
+    contract: 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCAvWFxVJP80D',
     fee: 0.05,
     locked: {
       from: 4_653_334,
@@ -76,11 +138,13 @@ export async function getPool(contract: string): Promise<IPool> {
       from: {
         ticker: 'TONCOIN',
         icon: '',
+        decimals: 9,
         contract: 'toncoin'
       },
       to: {
         ticker: 'DAI',
         icon: '',
+        decimals: 9,
         contract: 'dai'
       }
     }
@@ -99,10 +163,7 @@ export async function getPool(contract: string): Promise<IPool> {
  * @returns {ITransaction[]}
  */
 export async function getLatestPoolTransactions(pool: IPool, count: number = 500): Promise<ITransaction[]> {
-  if (!(
-    (pool.pair.from.contract === 'toncoin' && pool.pair.to.contract === 'dai')
-    || (pool.pair.from.contract === 'dai' && pool.pair.to.contract === 'toncoin')
-  )) throw new Error('pool not found');
+  // check if pool exists
 
   if (count < 0) count = 0;
 
@@ -119,7 +180,7 @@ export async function getLatestPoolTransactions(pool: IPool, count: number = 500
       type: txTypes[Math.floor(Math.random() * 3)],
       txid: '',
       timestamp: new Date(Date.now() - Math.floor(Math.random() * 10000000)),
-      amount: (Math.random() * 5000),
+      amount: (Math.random() * 5000 * 1000000000),
       pair: {
         rate: {
           forward: rate,
@@ -128,11 +189,13 @@ export async function getLatestPoolTransactions(pool: IPool, count: number = 500
         from: {
           icon: '',
           ticker: 'TONCOIN',
+          decimals: 9,
           contract: 'toncoin'
         },
         to: {
           icon: '',
           ticker: 'DAI',
+          decimals: 9,
           contract: 'dai'
         }
       }
@@ -155,9 +218,9 @@ export async function getLatestPoolTransactions(pool: IPool, count: number = 500
  * @returns {{ amount: number, percentage: number }}
  */
 export async function getPoolShare(contract: string, amounts: { from: number, to: number }) {
-  if (contract !== 'poolcontract1') throw new Error('pool not found');
+  if (contract !== 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCAvWFxVJP80D') throw new Error('pool not found');
   return {
-    amount: 0.000054,
+    amount: 0.000054 * 1000000000,
     percentage: 0.0012
   };
 }
@@ -193,7 +256,7 @@ export async function createPool(pair: IPair, amounts: { from: number, to: numbe
  * @returns {ITransaction}
  */
 export async function addLiquidity(contract: string, amounts: { from: number, to: number }): Promise<ITransaction> {
-  if (contract !== 'poolcontract1') throw new Error('pool not found');
+  if (contract !== 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCAvWFxVJP80D') throw new Error('pool not found');
 
   const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
   await wait(1000);
@@ -208,11 +271,13 @@ export async function addLiquidity(contract: string, amounts: { from: number, to
       from: {
         ticker: 'TONCOIN',
         icon: '',
+        decimals: 9,
         contract: 'toncoin'
       },
       to: {
         ticker: 'DAI',
         icon: '',
+        decimals: 9,
         contract: 'dai'
       }
     },
@@ -223,12 +288,36 @@ export async function addLiquidity(contract: string, amounts: { from: number, to
 }
 
 /**
- * get liquidity positions for current wallet
+ * Remove liquidity from pool
  * 
  * @async
+ * 
+ * @param {IPosition}
+ * @param {number} tokens pool tokens
+ * 
+ * @returns {ITransaction}
+ */
+export async function removeLiquidity(position: IPosition, tokens: number): Promise<ITransaction> {
+  const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  await wait(1000);
+
+  return {
+    pair: position.pair,
+    amount: tokens,
+    timestamp: new Date(Date.now()),
+    txid: '',
+    type: TransactionType.REMOVE_LIQUIDITY
+  } as ITransaction;
+}
+
+/**
+ * Get liquidity positions for current wallet
+ * 
+ * @async
+ * 
  * @returns {IPosition[]}
  */
- export async function getLiquidityPositions(): Promise<IPosition[]> {
+export async function getLiquidityPositions(): Promise<IPosition[]> {
   const state = store.getState();
 
   if (!state.wallet.wallet) throw new Error('wallet not connected');
@@ -238,11 +327,13 @@ export async function addLiquidity(contract: string, amounts: { from: number, to
       from: {
         ticker: 'TONCOIN',
         icon: '',
+        decimals: 9,
         contract: 'toncoin'
       },
       to: {
         ticker: 'DAI',
         icon: '',
+        decimals: 9,
         contract: 'dai'
       },
       rate: {
@@ -250,12 +341,13 @@ export async function addLiquidity(contract: string, amounts: { from: number, to
         backward: 1 / 3.75
       }
     },
-    contract: '',
-    tokens: 0.000054,
+    contract: 'EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCAvWFxVJP80D',
+    tokens: 0.000054 * 1000000000,
     share: 0.0012,
+    decimals: 9,
     amount: {
-      from: 100,
-      to: 375,
+      from: 100 * 1000000000,
+      to: 375 * 1000000000,
     }
   };
 
@@ -263,13 +355,15 @@ export async function addLiquidity(contract: string, amounts: { from: number, to
 }
 
 /**
- * get liquidity positions for current wallet
+ * get popular liquidity pools
  * 
  * @async
  * 
  * @returns {IPool[]}
  */
 export async function getPopularPools() {
-  const pool = await getPool('poolcontract1');
-  return Array.from({ length: 100 }, () => pool);
+  return [
+    await getPool('EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCAvWFxVJP80D'),
+    await getPool('EQAAFhjXzKuQ5N0c96nsdZQWATcJm909LYSaCFvWFxVJP809')
+  ];
 }

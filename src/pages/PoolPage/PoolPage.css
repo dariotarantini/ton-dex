@@ -1,8 +1,5 @@
-.page.page--pool {
-  margin-bottom: 25px;
-}
-
-h3.transactions_title {
-  margin-top: 25px;
-  margin-bottom: 25px;
+@media screen and (max-width: 700px) {
+  .page.page--pool {
+    margin-bottom: 105px;
+  }
 }

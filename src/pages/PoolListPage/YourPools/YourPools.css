@@ -1,0 +1,38 @@
+.your_pools {
+  flex-direction: column;
+  align-items: center;
+}
+
+.your_pools__positions {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-items: center;
+  justify-content: stretch;
+
+  gap: 75px 10px;
+}
+
+@media screen and (max-width: 925px) {
+  .your_pools {
+    margin-top: 10px;
+  }
+
+  .your_pools__positions {
+    grid-template-columns: auto auto;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .your_pools {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .your_pools__positions {
+    grid-template-columns: auto;
+  }
+}

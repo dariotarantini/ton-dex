@@ -21,12 +21,13 @@ export default function ChartCard({ title, info, selected, updater }: props) {
         (selected ? ' pool_chart__card--selected' : '')
       }
       onMouseEnter={updater}
+      onTouchStart={updater}
     >
       <div className="pool_card_title__wrapper">
         <span className="pool_card__title">{title}</span>
         <span
           className={
-            'pool_card__change' +
+            'pool_card__change pool_card__change--desktop' +
             (
               info.change > 0
                 ? ' pool_card__change--inc'

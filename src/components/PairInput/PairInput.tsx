@@ -50,7 +50,7 @@ export default function PairInput({
     setFromAmount(n);
     if (from && to) {
       const a = n * rate;
-      setToAmount(Math.round(a * 1000) / 1000);
+      setToAmount(a);
     }
   }
 
@@ -58,7 +58,7 @@ export default function PairInput({
     setToAmount(n);
     if (from && to) {
       const a = rate > 0 ? n / rate : 0;
-      setFromAmount(Math.round(a * 1000) / 1000);
+      setFromAmount(a);
     }
   }
 
@@ -97,7 +97,7 @@ export default function PairInput({
           >
             <ArrowFull />
           </div>
-        ) : ''}
+        ) : null}
       </div>
 
       <CoinInput

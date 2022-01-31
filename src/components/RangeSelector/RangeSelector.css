@@ -1,0 +1,96 @@
+.range_selector {
+  flex-direction: column;
+  width: 100%;
+}
+
+.range_selector__input {
+  position: relative;
+  margin: 0 10px;
+  height: 6px;
+  border-radius: 3px;
+
+  background: #EBEBEB;
+}
+
+.range_selector__input input {
+  width: 100%;
+  height: 100%;
+
+  background: none;
+  outline: none;
+  appearance: none;
+
+  cursor: pointer;
+}
+
+.range_selector_input__filled {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 3px;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+.range_selector_input__pointer {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+
+  background: #fff;
+  border: solid 6px var(--accent);
+
+  pointer-events: none;
+}
+
+.range_selector__input input::-moz-range-thumb {
+  opacity: 0;
+}
+
+.range_selector__input input::-webkit-slider-thumb {
+  opacity: 0;
+}
+
+.range_selector__actions {
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 10px 5px;
+}
+
+.range_selector__action {
+  padding: 5px 10px;
+  border-radius: 15px;
+
+  color: rgba(48, 55, 87, 0.75);
+  background: #fff;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.range_selector__action:hover {
+  background: rgb(245, 245, 245);
+}
+
+/* DARK MODE */
+
+html.dark_mode .range_selector__input {
+  background: #000000;
+}
+
+html.dark_mode .range_selector_input__pointer {
+  background: #000;
+}
+
+html.dark_mode .range_selector__action {
+  background: #000;
+}
+
+html.dark_mode .range_selector__action:hover {
+  background: rgb(20, 20, 20);
+}

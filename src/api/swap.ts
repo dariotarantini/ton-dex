@@ -1,5 +1,6 @@
-import IPair from "./types/IPair";
-import ITransaction from "./types/ITransaction";
+import type IPair from "./types/IPair";
+import type ITransaction from "./types/ITransaction";
+
 import TransactionType from "./types/TransactionType";
 
 /**

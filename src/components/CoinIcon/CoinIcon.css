@@ -6,8 +6,8 @@ img.coin__icon {
   user-select: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  img.coin__icon {
-    border-color: #000;
-  }
+/* DARK MODE */
+
+html.dark_mode img.coin__icon {
+  border-color: #000;
 }

@@ -3,26 +3,6 @@
   align-items: center;
 }
 
-.transaction_sent svg {
-  width: 250px;
-  height: 175px;
-  margin-top: 25px;
-}
-
-.transaction_sent h1 {
-  font-weight: 700;
-  font-size: 24px;
-  margin-top: 50px;
-}
-
-.transaction_sent p {
-  display: block !important;
-  max-width: 300px;
-  text-align: center;
-  margin-top: 20px;
-  opacity: 0.6;
-}
-
 .transaction_sent p span {
   display: inline-block;
   line-height: inherit;
@@ -37,8 +17,4 @@
 
 .transaction_sent button {
   margin-top: 25px;
-  height: 50px;
-  border-radius: 25px;
-  width: 100%;
-  text-align: center;
 }

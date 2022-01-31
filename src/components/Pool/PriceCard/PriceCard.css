@@ -2,14 +2,11 @@
   flex-direction: column;
   padding: 15px 20px;
   border-radius: 20px;
+  gap: 10px;
 }
 
 .pool_price__rate {
   align-items: center;
-}
-
-.pool_price__rate:nth-child(1) {
-  margin-bottom: 10px;
 }
 
 .pool_price__rate > img {
@@ -23,4 +20,16 @@
 .pool_price__rate > span {
   opacity: 0.85;
   line-height: 20px;
+}
+
+@media screen and (max-width: 700px) {
+  .pool__price_card {
+    padding: 20px 25px;
+    margin-top: 20px;
+    gap: 15px;
+  }
+
+  .pool_price__rate > span {
+    font-size: 18px;
+  }
 }

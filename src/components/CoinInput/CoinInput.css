@@ -98,12 +98,12 @@
   margin-left: 10px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .coin__selector {
-    background: rgb(16, 19, 31);
-  }
+/* DARK MODE */
 
-  .coin__selected--small:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
+html.dark_mode .coin__selector {
+  background: rgb(16, 19, 31);
+}
+
+html.dark_mode .coin__selected--small:hover {
+  background: rgba(255, 255, 255, 0.05);
 }

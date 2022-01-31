@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import { getFiatRate } from '../../api/coin';
+import { getFiatRate } from '../../api/coinlist';
 import TransactionType from '../../api/types/TransactionType';
 import ITransaction from '../../api/types/ITransaction';
 import IColumnTemplate from '../Table/IColumnTemplate';
@@ -12,6 +12,24 @@ import Selector from '../Selector/Selector';
 import Table from '../Table/Table';
 
 import './TransactionList.css';
+
+const filterOptions = [
+  'All',
+  'Swaps',
+  'Adds',
+  'Removes'
+];
+
+const txTypes = [
+  TransactionType.SWAP,
+  TransactionType.ADD_LIQUIDITY,
+  TransactionType.REMOVE_LIQUIDITY
+];
+
+type props = {
+  transactions: ITransaction[]
+  pageSize?: number
+}
 
 function renderSelector(
   options: string[],
@@ -30,41 +48,26 @@ function renderSelector(
 }
 
 function renderTxType(tx: ITransaction): JSX.Element {
+  let text = '';
+
   switch (tx.type) {
     case TransactionType.SWAP: {
-      return (
-        <a href="https://ton.sh/" target="_blank" rel="noreferrer">Swap {tx.pair.from.ticker} for {tx.pair.to.ticker}</a>
-      );
+      text = `Swap ${tx.pair.from.ticker} for ${tx.pair.to.ticker}`;
+      break;
     }
     case TransactionType.ADD_LIQUIDITY: {
-      return (
-        <a href="https://ton.sh/" target="_blank" rel="noreferrer">Add liquidity</a>
-      );
+      text = 'Add liquidity';
+      break;
     }
     case TransactionType.REMOVE_LIQUIDITY: {
-      return (
-        <a href="https://ton.sh/" target="_blank" rel="noreferrer">Remove liquidity</a>
-      );
+      text = 'Remove liquidity';
+      break;
     }
   }
-}
 
-const filterOptions = [
-  'All',
-  'Swaps',
-  'Adds',
-  'Removes'
-];
-
-const txTypes = [
-  TransactionType.SWAP,
-  TransactionType.ADD_LIQUIDITY,
-  TransactionType.REMOVE_LIQUIDITY
-];
-
-type props = {
-  transactions: ITransaction[]
-  pageSize?: number
+  return (
+    <a href="https://ton.sh/" className="table__link" target="_blank" rel="noreferrer">{text}</a>
+  );
 }
 
 export default function TransactionList({ transactions, pageSize }: props) {

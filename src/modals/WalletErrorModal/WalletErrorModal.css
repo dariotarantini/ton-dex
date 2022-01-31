@@ -1,0 +1,8 @@
+.wallet_error {
+  flex-direction: column;
+  align-items: center;
+}
+
+.wallet_error p {
+  width: 250px;
+}

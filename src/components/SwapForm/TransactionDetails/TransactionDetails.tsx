@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { getFiatRate } from '../../../api/coin';
+import stringifyNumber from '../../../utils/stringifyNumber';
+import { getFiatRate } from '../../../api/coinlist';
 import IPool from '../../../api/types/IPool';
 
 import { ReactComponent as Info } from '../../../assets/icons/info.svg';
-import stringifyNumber from '../../../utils/stringifyNumber';
+
 import DetailsInfo from './DetailsInfo/DetailsInfo';
 
 import './TransactionDetails.css';
@@ -19,6 +20,27 @@ type props = {
 export default function TransactionDetails({ pool, priceImpact, amount, reversed }: props) {
   const [isDetailsInfoShown, setDetailsInfoShown] = useState<boolean>(false);
   const [fiat, setFiat] = useState<number>();
+
+  const [from, setFrom] = useState(
+    reversed
+      ? pool.pair.to
+      : pool.pair.from
+  );
+  const [to, setTo] = useState(
+    reversed
+      ? pool.pair.from
+      : pool.pair.to
+  );
+
+  useEffect(() => {
+    if (reversed) {
+      setFrom(pool.pair.to);
+      setTo(pool.pair.from);
+    } else {
+      setFrom(pool.pair.from);
+      setTo(pool.pair.to);
+    }
+  }, [pool, reversed]);
 
   useEffect(() => {
     (async () => {
@@ -37,21 +59,22 @@ export default function TransactionDetails({ pool, priceImpact, amount, reversed
       {isDetailsInfoShown ? (
         <DetailsInfo
           pool={pool}
+          reversed={reversed}
           priceImpact={priceImpact}
           amount={amount}
         />
-      ) : ''}
+      ) : null}
 
       <span
         className="transaction__info"
         onMouseEnter={() => setDetailsInfoShown(true)}
         onMouseLeave={() => setDetailsInfoShown(false)}
       ><Info /></span>
-      <span>1 {pool.pair.from.ticker} = {stringifyNumber(pool.pair.rate[reversed ? 'backward' : 'forward'])} {pool.pair.to.ticker}</span>
+      <span>1 {from.ticker} = {stringifyNumber(pool.pair.rate[reversed ? 'backward' : 'forward'])} {to.ticker}</span>
       {
         fiat
           ? <span className="transaction__fiat">(${stringifyNumber(fiat)})</span>
-          : ''
+          : null
       }
     </div>
   );

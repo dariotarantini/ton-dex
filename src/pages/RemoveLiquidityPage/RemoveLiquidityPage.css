@@ -1,0 +1,56 @@
+.remove_liquidity__info {
+  align-items: center;
+  flex-direction: column;
+  margin: 25px 0 45px;
+}
+
+.remove_liquidity__info h1 {
+  font-weight: 700;
+  font-size: 64px;
+}
+
+.remove_liquidity__info span {
+  opacity: 0.6;
+  font-size: 16px;
+}
+
+.remove_liquidity__pool {
+  align-self: center;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+
+  border-radius: 15px;
+  padding: 6px 9px;
+
+  cursor: pointer;
+  user-select: none;
+}
+
+.remove_liquidity__pool:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+html.dark_mode .remove_liquidity__pool:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.remove_liquidity_pool__icons {
+  flex-direction: row;
+  align-items: center;
+}
+
+.remove_liquidity_pool__icons img {
+  border-width: 2px;
+  width: 24px;
+  height: 24px;
+}
+
+.remove_liquidity_pool__icons :nth-child(1) {
+  z-index: 1;
+}
+
+.remove_liquidity_pool__icons :nth-child(2) {
+  z-index: 0;
+  margin-left: -7px;
+}

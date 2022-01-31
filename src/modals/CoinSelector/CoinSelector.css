@@ -8,6 +8,7 @@
 
 .modal_coin_selector__header svg {
   height: 12px;
+  width: 12px;
 }
 
 .modal_coin_selector__header h2 {
@@ -123,15 +124,26 @@ span.modal_coin_selector__empty {
   width: 100%;
   opacity: 0.75;
   text-align: center;
+  margin: 25px 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  .modal_coin_selector__item:not(.modal_coin_selector__item--disallowed):not(.modal_coin_selector__item--selected):hover {
-    /* background: #011722; */
-    background: rgba(255, 255, 255, 0.1);
+@media screen and (max-width: 700px) {
+  .coin_selector {
+    height: 65vh;
   }
 
-  .modal_coin_selector__item--selected {
-    background: rgba(0, 136, 204, 0.1);
+  .modal_coin_selector__list {
+    max-height: none;
   }
+}
+
+/* DARK MODE */
+
+html.dark_mode .modal_coin_selector__item:not(.modal_coin_selector__item--disallowed):not(.modal_coin_selector__item--selected):hover {
+  /* background: #011722; */
+  background: rgba(255, 255, 255, 0.1);
+}
+
+html.dark_mode .modal_coin_selector__item--selected {
+  background: rgba(0, 136, 204, 0.1);
 }

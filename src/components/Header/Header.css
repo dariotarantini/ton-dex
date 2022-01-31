@@ -1,6 +1,6 @@
 header {
   position: relative;
-  padding-top: 25px;
+  padding-top: 40px;
   width: 100%;
 
   justify-content: space-between;
@@ -15,15 +15,21 @@ header a {
 }
 
 header .header__logo {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   font-size: 19px;
 }
 
-header .header__logo svg {
+header .header__logo img {
   font-weight: 700;
   width: 32px;
   height: 32px;
   margin-right: 12px;
+}
+
+.header__logo span {
+  font-weight: 700;
 }
 
 header .nav__search {
@@ -39,6 +45,7 @@ header .header__nav .btn--trinary {
 
 header button {
   height: 40px;
+  font-weight: 700;
 }
 
 header button.btn.btn--disabled > .loader__circle {
@@ -58,4 +65,33 @@ header .address_menu__wrapper {
   top: 100%;
   padding-top: 5px;
   z-index: 10000;
+}
+
+.header__buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+#nav__mobile {
+  display: none;
+}
+
+@media screen and (max-width: 700px) {
+  header {
+    padding-top: 0;
+    height: 80px;
+    align-items: center;
+  }
+
+  .header__logo span {
+    display: none;
+  }
+
+  #nav__mobile {
+    display: flex;
+  }
+
+  #nav__desktop {
+    display: none;
+  }
 }

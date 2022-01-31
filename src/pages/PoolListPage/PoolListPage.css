@@ -1,20 +1,144 @@
-.page--pools > h3 {
+.page.page--pools {
+  padding-top: 40px;
+}
+
+.page--pools .page__content {
+  flex-direction: column;
+  flex: 1;
+  margin-top: 50px;
+}
+
+.page--pools .page__content.page__content--empty {
+  align-items: center;
+
+  width: 100%;
+  flex: 1;
+  margin: 0;
+}
+
+.page--pools .page__content.page__content--empty svg {
+  margin-top: 75px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.page--pools .page__content.page__content--empty > .page_content__text {
+  flex-direction: column;
+  align-items: center;
+  width: 250px;
+  margin-top: 50px;
+}
+
+.page--pools .page__content.page__content--empty > .page_content__text p {
+  display: block !important;
+  text-align: center;
+  line-height: 24px;
+}
+
+.page--pools .page__content.page__content--empty p > a {
+  display: inline-block;
+  margin: 0 5px; 
+}
+
+.page--pools .page__content.page__content--empty > .page_content__text h4 {
+  font-weight: 700;
   margin-bottom: 10px;
 }
 
-.pools_list__item {
+.pools__tabs {
+  width: 100%;
+  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
-.pools_list_item__icon {
-  display: block;
+.page--pools .page__content > h2 {
+  display: none !important;
+  margin: 0;
+  width: 100%;
+
+  font-weight: 900;
+  font-size: 35px;
+  text-align: center;
 }
 
-.pools_list_item__icon img:nth-child(1) {
-  z-index: 10;
+.pools__tabs .selector__option a {
+  color: currentColor;
+  border: none;
+  font-size: 16px;
+  padding: 3px 14px;
+  height: auto;
 }
 
-.pools_list_item__icon img:nth-child(2) {
-  margin-left: -15px;
-  z-index: 9;
+html.dark_mode .pools__tabs {
+  background: #000;
+}
+
+.pools.pools--loading {
+  padding-top: 50px;
+}
+
+.pools.pools--loading .loader__wrapper {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+@media screen and (max-width: 700px) {
+  .page.page--pools {
+    padding: 0;
+  }
+
+  .page--pools .page__content {
+    padding-bottom: 40px;
+    margin-bottom: 88px;
+    margin-top: 0;
+  }
+
+  .page--pools .page__content.page__content--empty {
+    justify-content: center;
+    margin-top: -100px;
+  }
+
+  .page--pools .page__content.page__content--empty > svg {
+    margin-top: 0;
+  }
+
+  .page--pools .pools__tabs {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+
+    padding-top: 20px;
+    padding-bottom: 30px;
+    background: #fff;
+  }
+
+  .page--pools .pools__tabs .selector__options,
+  .page--pools .pools__tabs .selector__option {
+    height: auto;
+  }
+
+  .pools__tabs:before {
+    content: ' ';
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    height: 40px;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%);
+  }
+
+  html.dark_mode .pools__tabs:before {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #000 100%);
+  }
+
+  .page--pools .page__content > h2 {
+    display: block !important;
+    margin-top: 10px;
+    margin-bottom: 50px;
+  }
 }

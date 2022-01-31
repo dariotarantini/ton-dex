@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFiatRate } from '../../../api/coin';
+import { getFiatRate } from '../../../api/coinlist';
 import IPool from '../../../api/types/IPool';
 
 import ChartTimeframe from '../../Chart/Timeframe';

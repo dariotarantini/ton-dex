@@ -22,7 +22,8 @@ export default function StartingPriceInput({ price, setPrice, from, to }: props)
       <span>1 {from.ticker}<span className="equal">=</span></span>
       <input
         type="number"
-        value={price}	
+        placeholder="0"
+        value={price > 0 ? price : ''}	
         onChange={updatePrice}
       />
       <span className="to">{to.ticker}</span>

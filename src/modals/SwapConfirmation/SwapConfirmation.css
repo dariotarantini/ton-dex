@@ -2,10 +2,12 @@
   width: 100%;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
 }
 
-.swap_confirmation__pair > *:not(:last-child) {
-  margin-bottom: 10px;
+.swap_confirmation__pair svg {
+  width: 12px;
+  height: 12px;
 }
 
 .swap_confirmation__coin {
@@ -28,8 +30,8 @@
   font-size: 28px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .confirmation--swap svg {
-    opacity: 1;
-  }
+/* DARK MODE */
+
+html.dark_mode .swap_confirmation__pair svg {
+  opacity: 1;
 }

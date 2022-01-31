@@ -7,6 +7,9 @@ import SettingsPage from "./SettingsPage/SettingsPage";
 import TransactionsPage from "./TransactionsPage/TransactionsPage";
 import AddLiquidityPage from "./AddLiquidityPage/AddLiquidityPage";
 import RemoveLiquidityPage from "./RemoveLiquidityPage/RemoveLiquidityPage";
+import AllPools from "./PoolListPage/AllPools/AllPools";
+import YourPools from "./PoolListPage/YourPools/YourPools";
+import NotFoundPage from "./NotFoundPage/NotFoundPage";
 
 export default function Router() {
   return (
@@ -16,7 +19,11 @@ export default function Router() {
       <Route path="/transactions" element={<TransactionsPage />} />
       <Route path="/settings" element={<SettingsPage />} />
 
-      <Route path="/pool" element={<PoolListPage />} />
+      <Route path="/pool" element={<PoolListPage />}>
+        <Route path="all" element={<AllPools />} />
+        <Route path="your" element={<YourPools />} />
+      </Route>
+
       <Route path="/pool/:contract" element={<PoolPage />} />
       <Route path="/pool/*" element={<PoolPage />} />
 
@@ -27,6 +34,8 @@ export default function Router() {
       <Route path="/remove" element={<RemoveLiquidityPage />} />
       <Route path="/remove/:contract" element={<RemoveLiquidityPage />} />
       <Route path="/remove/*" element={<RemoveLiquidityPage />} />
+
+      <Route path="*" element={<NotFoundPage />} />
 
     </Routes>
   )

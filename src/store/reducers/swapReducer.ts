@@ -15,6 +15,7 @@ export interface SwapState {
 const defaultCoin: ICoin = {
   contract: 'toncoin',
   ticker: 'TONCOIN',
+  decimals: 9,
   icon: ''
 };
 

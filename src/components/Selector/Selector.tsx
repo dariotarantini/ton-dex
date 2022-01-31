@@ -1,115 +1,101 @@
-import {
-  Dispatch,
-  SetStateAction,
-  Component,
-  createRef,
-  ReactElement
-} from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import './Selector.css';
 
-type Props = {
+type props = {
   options: Array<string | JSX.Element>
   selected: number
-  updater: Dispatch<SetStateAction<number>>
+  updater: (n: number) => void
 }
 
-type State = {
-  animating: boolean,
-  selectedDimensions: {
-    width: number,
-    left: number
-  }
-}
+export default function Selector({
+  options,
+  selected,
+  updater
+}: props) {
+  const [animating, setAnimating] = useState(false);
 
-export default class Selector extends Component<Props, State> {
-  private selectedRef: React.RefObject<HTMLDivElement>;
-  private rootRef: React.RefObject<HTMLDivElement>;
+  const [selectedWidth, setSelectedWidth] = useState(0);
+  const [selectedLeft, setSelectedLeft] = useState(0);
+  const [rootWidth, setRootWidth] = useState(0);
 
-  constructor(props: Props) {
-    super(props);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const selectedRef = useRef<HTMLDivElement>(null);
 
-    this.selectedRef = createRef<HTMLDivElement>();
-    this.rootRef = createRef<HTMLDivElement>();
+  const select = useCallback((i: number) => {
+    if (!rootRef.current) return;
 
-    this.state = {
-      animating: false,
-      selectedDimensions: {
-        width: 0,
-        left: 0
-      }
-    };
-  }
+    const selectedEl = rootRef.current.querySelectorAll('.selector__option')[i];
 
-  select(i: number) {
-    const selected = this.rootRef.current?.querySelectorAll('.selector__option')[i];
-
-    if (!selected) {
-      this.setState({
-        selectedDimensions: {
-          width: 0,
-          left: 0
-        }
-      });
-
+    if (!selectedEl) {
+      setSelectedWidth(0);
+      setSelectedLeft(0);
       return;
     }
 
-    const selectedDimensions = selected.getBoundingClientRect();
-    const rootDimensions = this.rootRef.current?.getBoundingClientRect();
+    const selectedDimensions = selectedEl.getBoundingClientRect();
+    const rootDimensions = rootRef.current.getBoundingClientRect();
 
-    this.setState({
-      selectedDimensions: {
-        width: selectedDimensions.width,
-        left: selectedDimensions.left - (rootDimensions?.left ?? 0)
+    setSelectedWidth(selectedDimensions.width);
+    setSelectedLeft(selectedDimensions.left - rootDimensions.left);
+
+    if (selected !== i) updater(i);
+  }, [selected, updater]);
+
+  useEffect(() => { select(selected); }, [selected, select]);
+
+  useEffect(() => {
+    select(selected);
+    setTimeout(() => setAnimating(true));
+    return () => setAnimating(false);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (!rootRef.current) return;
+
+    const observer = new ResizeObserver(e => e.forEach(() => {
+      const el = e[0];
+      const d = el.target.getBoundingClientRect();
+      setRootWidth(d.width);
+    }));
+
+    observer.observe(rootRef.current);
+
+    return () => observer.disconnect();
+  }, [rootRef]);
+
+  useEffect(() => { select(selected); }, [select, selected, rootWidth]);
+
+  const renderOptions = () => options.map((o, i) => (
+    <div
+      key={i}
+      className={
+        'selector__option' +
+        (typeof o !== 'string' ? ' selector__option--element' : '') +
+        (i === selected ? ' selector__option--selected' : '')
       }
-    });
+      onClick={() => select(i)}
+    >{o}</div>
+  ));
 
-    if (this.props.selected !== i) this.props.updater(i);
-  }
-
-  renderOptions(): ReactElement[] {
-    return this.props.options.map((o, i) => (
+  return (
+    <div
+      ref={rootRef}
+      className={
+        "selector" +
+        (animating ? ' selector--animating' : '')
+      }
+    >
+      <div className="selector__options">{renderOptions()}</div>
       <div
-        key={i}
-        className={
-          'selector__option' +
-          (typeof o !== 'string' ? ' selector__option--element' : '') +
-          (i === this.props.selected ? ' selector__option--selected' : '')
-        }
-        onClick={() => this.select(i)}
-      >{o}</div>
-    ));
-  }
-
-  componentDidMount() {
-    this.select(this.props.selected);
-    setTimeout(() => this.setState({ animating: true }));
-  }
-
-  componentWillUnmount() {
-    this.setState({ animating: false });
-  }
-
-  render() {
-    return (
-      <div
-        ref={this.rootRef}
-        className={
-          "selector" +
-          (this.state.animating ? ' selector--animating' : '')
-        }
-      >
-        <div className="selector__options">{this.renderOptions()}</div>
-        <div
-          ref={this.selectedRef}
-          className="selector__selected"
-          style={{
-            width: this.state.selectedDimensions.width,
-            left: this.state.selectedDimensions.left,
-          }}
-        ></div>
-      </div>
-    );
-  }
+        ref={selectedRef}
+        className="selector__selected"
+        style={{
+          width: selectedWidth,
+          left: selectedLeft,
+        }}
+      ></div>
+    </div>
+  );
 }

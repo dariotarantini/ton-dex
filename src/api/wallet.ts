@@ -1,20 +1,72 @@
-import { store } from "../store/store";
+import type ITransaction from "./types/ITransaction";
+import type ICoin from "./types/ICoin";
+import type IWallet from "./types/IWallet";
 
 import TransactionType from "./types/TransactionType";
-import ITransaction from "./types/ITransaction";
-import ICoin from "./types/ICoin";
-import IWallet from "./types/IWallet";
+
+import { store } from "../store/store";
+import { connectWallet, disconnectWallet } from "../store/reducers/walletReducers";
+
+declare global {
+  interface Window { ton: any; }
+}
+
+export const provider =  window.ton;
+
+provider?.on('accountsChanged', (accounts: string[]) => {
+  if (!store.getState().wallet.wallet) return;
+
+  if (accounts.length) {
+    store.dispatch(connectWallet());
+  } else {
+    store.dispatch(disconnectWallet());
+  }
+});
+
+/**
+ * @async
+ * @returns {number} TONCOIN balance
+ */
+async function getBalance(): Promise<number> {
+  if (!store.getState().wallet.wallet) throw new Error('wallet not found');
+
+  try {
+    const balance = await provider.send('ton_getBalance');
+
+    switch (typeof balance) {
+      case 'number':
+        return balance;
+      case 'string':
+        return 0;
+      default:
+        throw new Error('cannot get balance');
+    }
+  } catch (e) {
+    throw e;
+  }
+}
 
 /**
  * @async
  * @returns {IWallet} wallet
  */
-export async function requestWallet(): Promise<IWallet> {
-  const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-  await wait(500);
+export async function request(): Promise<IWallet> {
+  if (!provider) {
+    throw new Error('extension not found');
+  }
+
+  let wallet;
+
+  try {
+    wallet = await provider.send('ton_requestAccounts');
+  } catch (e) {
+    throw new Error('cannot get wallet');
+  }
+
+  if (!wallet[0]) throw new Error('wallet not found');
 
   return {
-    address: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N'
+    address: wallet[0]
   };
 }
 
@@ -27,10 +79,20 @@ export async function getCoinBalance(coin: ICoin): Promise<number | undefined> {
   if (coin.contract === '' || coin.contract === '') return;
   if (!store.getState().wallet.wallet) throw new Error('wallet not connected');
 
-  if (coin.ticker === 'TONCOIN') return 15000;
-  if (coin.ticker === 'DAI') return 5000;
-  if (coin.ticker === 'USDT') return 7500
-  if (coin.ticker === 'WBTC') return 8.781593;
+  if (coin.contract === 'toncoin') {
+    try {
+      const balance = await getBalance();
+      return balance;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  // TODO: get token balance
+  if (coin.contract === 'dai') return 5000 * 1000000000;
+  if (coin.contract === 'usdt') return 7500 * 1000000000
+  if (coin.contract === 'wbtc') return 8.781593 * 1000000000;
 
   return 0;
 }
@@ -61,7 +123,7 @@ export async function getLatestWalletTransactions(count: number = 500): Promise<
       type: txTypes[Math.floor(Math.random() * 3)],
       txid: '',
       timestamp: new Date(Date.now() - Math.floor(Math.random() * 10000000)),
-      amount: (Math.random() * 5000),
+      amount: (Math.random() * 5000 * 1000000000),
       pair: {
         rate: {
           forward: rate,
@@ -70,11 +132,13 @@ export async function getLatestWalletTransactions(count: number = 500): Promise<
         from: {
           icon: '',
           ticker: 'TONCOIN',
+          decimals: 9,
           contract: 'toncoin'
         },
         to: {
           icon: '',
           ticker: 'DAI',
+          decimals: 9,
           contract: 'dai'
         }
       }
@@ -88,7 +152,7 @@ export async function getLatestWalletTransactions(count: number = 500): Promise<
 }
 
 const api = {
-  requestWallet,
+  request,
   getCoinBalance,
   getLatestWalletTransactions
 };

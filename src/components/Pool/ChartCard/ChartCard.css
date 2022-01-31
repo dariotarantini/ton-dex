@@ -11,10 +11,6 @@
   background: rgba(48, 55, 87, 0.025);
 }
 
-.pool_chart__card:not(:last-child) {
-  margin-bottom: 20px;
-}
-
 .pool_card_title__wrapper {
   align-items: center;
   margin-bottom: 5px;
@@ -27,16 +23,18 @@
 
 .pool_card__title {
   font-size: 18px;
+  line-height: 125%;
 }
 
-span.pool_card__value {
+.pool_card__value {
   font-size: 36px;
   font-weight: 800;
-  line-height: 45px;
+  line-height: 125%;
 }
 
 .pool_card__change {
   font-size: 18px;
+  line-height: 125%;
 }
 
 .pool_card__change.pool_card__change--inc {
@@ -51,8 +49,40 @@ span.pool_card__value {
   display: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  .pool_chart__card--selected {
-    background: rgba(48, 55, 87, 0.15);
+@media screen and (max-width: 700px) {
+  .pool_chart__card {
+    padding: 10px 15px;
+    border-radius: 15px;
   }
+  
+  .pool_card_title__wrapper {
+    height: auto;
+    margin-bottom: 2px;
+  }
+  
+  .pool_card__title {
+    font-size: 14px;
+  }
+  
+  .pool_card__change {
+    font-size: 12px;
+  }
+  
+  .pool_card__change--mobile {
+    display: block;
+  }
+  
+  .pool_card__change--desktop {
+    display: none;
+  }
+  
+  .pool_card__value {
+    font-size: 1.125em;
+  }
+}
+
+/* DARK MODE */
+
+html.dark_mode .pool_chart__card--selected {
+  background: rgba(48, 55, 87, 0.15);
 }

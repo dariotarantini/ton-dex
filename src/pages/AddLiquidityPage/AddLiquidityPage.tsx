@@ -1,17 +1,18 @@
+import type IPool from "../../api/types/IPool";
+import type ITransaction from "../../api/types/ITransaction";
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+import useModal from "../../hooks/useModal";
 import stringifyNumber from "../../utils/stringifyNumber";
 import stringifyPercentage from "../../utils/stringifyPercentage";
 
 import { addLiquidity, createPool, getPool, getPoolContract, getPoolShare } from "../../api/pool";
 import { getCoinBalance } from "../../api/wallet";
-import IPool from "../../api/types/IPool";
-import ITransaction from "../../api/types/ITransaction";
-import TransactionSent from "../../modals/TransactionSent/TransactionSent";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { requestWallet, selectWallet, selectWalletLoading } from "../../store/reducers/walletReducers";
+import { selectWallet } from "../../store/reducers/walletReducers";
 import {
   selectFrom,
   selectFromAmount,
@@ -25,9 +26,13 @@ import {
   setToAmount
 } from "../../store/reducers/addLiquidityReducer";
 
+import TransactionSent from "../../modals/TransactionSent/TransactionSent";
+import TransactionError from "../../modals/TransactionError/TransactionError";
 import AddLiquidityConfirmation from "../../modals/AddLiquidityConfirmation/AddLiquidityConfirmation";
+
 import StartingPriceInput from "../../components/StartingPriceInput/StartingPriceInput";
 import PairInput from "../../components/PairInput/PairInput";
+import SendButton from "../../components/SendButton/SendButton";
 
 import { ReactComponent as Cog } from '../../assets/icons/cog.svg';
 
@@ -46,7 +51,6 @@ export default function AddLiquidityPage() {
   const navigate = useNavigate();
 
   const wallet = useAppSelector(selectWallet);
-  const walletLoading = useAppSelector(selectWalletLoading);
   const from = useAppSelector(selectFrom);
   const fromAmount = useAppSelector(selectFromAmount);
   const to = useAppSelector(selectTo);
@@ -56,13 +60,15 @@ export default function AddLiquidityPage() {
   const [pool, setPool] = useState<IPool>();
   const [transaction, setTransaction] = useState<ITransaction>();
 
-  const [isConfirmationVisible, setConfirmationVisible] = useState<boolean>(false);
   const [reversed, setReversed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [share, setShare] = useState<Shares>();
-
+  
   const [fromBalance, setFromBalance] = useState<number>();
   const [toBalance, setToBalance] = useState<number>();
+
+  const { isShowing: isConfirmationVisible, toggle: toggleConfirmation } = useModal();
+  const { isShowing: isTransactionFailed, toggle: toggleTransactionFailed } = useModal();
 
   useEffect(() => {
     let path = '/add/';
@@ -106,6 +112,10 @@ export default function AddLiquidityPage() {
 
   return (
     <div className="page page--centered">
+      <TransactionError
+        isShowing={isTransactionFailed}
+        toggle={toggleTransactionFailed}
+      />
 
       {transaction ? (
         <TransactionSent
@@ -113,12 +123,12 @@ export default function AddLiquidityPage() {
           toggle={() => setTransaction(undefined)}
           transaction={transaction}
         />
-      ) : ''}
+      ) : null}
 
       {from && to ? (
         <AddLiquidityConfirmation
           isShowing={isConfirmationVisible}
-          toggle={(b?: boolean) => setConfirmationVisible(b ?? !isConfirmationVisible)}
+          toggle={toggleConfirmation}
           onDecline={() => setLoading(false)}
           onConfirm={async () => {
             if (!from && !to) return;
@@ -130,9 +140,9 @@ export default function AddLiquidityPage() {
                 setFromAmount(0);
                 setToAmount(0);
               } catch(e) {
-                // TODO: show error
                 console.error(e);
                 setTransaction(undefined);
+                toggleTransactionFailed(true);
               }
             } else {
               try {
@@ -149,13 +159,13 @@ export default function AddLiquidityPage() {
                 });
                 setTransaction(tx);
               } catch(e) {
-                // TODO: show error
                 console.error(e);
                 setTransaction(undefined);
+                toggleTransactionFailed(true);
               }
             }
             setLoading(false);
-            setConfirmationVisible(false);
+            toggleConfirmation(false);
             setFromAmount(0);
             setToAmount(0);
             setStartingPrice(0);
@@ -174,14 +184,19 @@ export default function AddLiquidityPage() {
             to: toAmount
           }}
         />
-      ) : ''}
+      ) : null}
 
       <div className="card__title">
         <h4>Add liquidity</h4>
         <Cog onClick={() => navigate('/settings')} />
       </div>
 
-      <div className="card border_separator">
+      <div
+        className={
+          'card border_separator' +
+          (typeof from === 'undefined' || typeof to === 'undefined' ? ' card--no-gap' : '')
+        }
+      >
         <PairInput
           rate={
             pool
@@ -214,128 +229,92 @@ export default function AddLiquidityPage() {
               setPrice={n => dispatch(setStartingPrice(n))}
             />
           </div>
-        ) : ''}
+        ) : null}
 
         {(from && to) ? (
           pool ? (
-            <div className="liquidity__info">
+            <div className="card__info">
 
-              <div className="liquidity_info__prop">
-                <span className="title">{pool.pair.from.ticker} Price</span>
+              <div className="card_info__prop">
+                <span className="card_info__title">{pool.pair.from.ticker} Price</span>
                 <span>{stringifyNumber(pool.pair.rate.forward)} {pool.pair.to.ticker}</span>
               </div>
 
-              <div className="liquidity_info__prop">
-                <span className="title">{pool.pair.to.ticker} Price</span>
+              <div className="card_info__prop">
+                <span className="card_info__title">{pool.pair.to.ticker} Price</span>
                 <span>{stringifyNumber(pool.pair.rate.backward)} {pool.pair.from.ticker}</span>
               </div>
 
-              <div className="liquidity_info__prop">
-                <span className="title">Pool share</span>
+              <div className="card_info__prop">
+                <span className="card_info__title">Pool share</span>
                 <span>{stringifyPercentage(fromAmount / pool.locked.from)}%</span>
               </div>
 
-              <div className="liquidity_info__prop">
-                <span className="title">Pool fee</span>
+              <div className="card_info__prop">
+                <span className="card_info__title">Pool fee</span>
                 <span>{pool.fee}%</span>
               </div>
 
             </div>
           ) : (
-            <div className="liquidity__info">
+            <div className="card__info">
 
               {startingPrice !== 0 ? (
-                <div className="liquidity_info__prop">
-                  <span className="title">{to.ticker} Price</span>
+                <div className="card_info__prop">
+                  <span className="card_info__title">{to.ticker} Price</span>
                   <span>{stringifyNumber(1 / startingPrice)} {from.ticker}</span>
                 </div>
-              ) : ''}
+              ) : null}
 
-              <div className="liquidity_info__prop">
-                <span className="title">Pool fee</span>
+              <div className="card_info__prop">
+                <span className="card_info__title">Pool fee</span>
                 <span>{fee}%</span>
               </div>
 
             </div>
           )
-        ) : ''}
+        ) : null}
 
         <div
           className={
-            'action__buttons' +
-            ((!from || !to) ? ' action__buttons--no-pool' : '')
+            'card__action_buttons' +
+            ((!from || !to) ? ' card__action_buttons--no-pool' : '')
           }
         >
-          {loading || walletLoading ? (
-            <button className="btn btn--secondary btn--unclickable">
-              <div className="loader__circle"></div>
-              <span>Loading...</span>
-            </button>
-          ) : (
-            wallet ? (
-              (from && to) ? (
-                (fromAmount > 0 && toAmount > 0) ? (
-                  (
-                    fromBalance && toBalance &&
-                    (fromBalance >= fromAmount && toBalance >= toAmount)
-                  ) ? (
-                    pool ? (
-                      <button
-                        onClick={async () => {
-                          try {
-                            setLoading(true);
-                            setConfirmationVisible(true);
-                            setShare(await getPoolShare(pool.contract, {
-                              from: fromAmount,
-                              to: toAmount
-                            }));
-                          } catch(e) {
-                            setLoading(false);
-                            setConfirmationVisible(false);
-                            console.error(e);
-                          }
-                        }}
-                      >Add liquidity</button>
-                    ) : (
-                      startingPrice !== 0 ? (
-                        <button
-                          onClick={() => {
-                            setLoading(true);
-                            setConfirmationVisible(true);
-                          }}
-                        >Create pool</button>
-                      ) : (
-                        <button
-                          className="btn--secondary btn--disabled"
-                        >Enter starting price</button>
-                      )
-                    )
-                  ) : (
-                    <button
-                      className="btn--secondary btn--disabled"
-                    >Insufficient balance</button>
-                  )
-                ) : (
-                  <button
-                    className="btn--secondary btn--disabled"
-                  >Enter an amount</button>
-                )
-              ) : (
-                <button
-                  className="btn--secondary btn--disabled"
-                >Select pair</button>
-              )
-            ) : (
-              <button
-                className="btn btn--secondary"
-                onClick={() => dispatch(requestWallet())}
-              >Connect Wallet</button>
-            )
-          )}
+          <SendButton
+            actionText={pool ? 'Add liquidity' : 'Create pool'}
+            action={async () => {
+              setLoading(true);
+              toggleConfirmation(true);
+
+              if (pool) {
+                try {
+                  setShare(await getPoolShare(pool.contract, {
+                    from: fromAmount,
+                    to: toAmount
+                  }));
+                } catch(e) {
+                  setLoading(false);
+                  toggleConfirmation(false);
+                  console.error(e);
+                }
+              }
+            }}
+
+            loading={loading}
+            isPoolSelected={typeof from !== 'undefined' && typeof to !== 'undefined'}
+            isAmountValid={fromAmount > 0 && toAmount > 0}
+            isBalanceValid={(
+              typeof fromBalance !== 'undefined' &&
+              typeof toBalance !== 'undefined' &&
+              (fromBalance >= fromAmount && toBalance >= toAmount)
+            )}
+
+            isStartingPriceValid={pool ? true : startingPrice !== 0}
+          />
         </div>
 
       </div>
-
     </div>
   );
 }

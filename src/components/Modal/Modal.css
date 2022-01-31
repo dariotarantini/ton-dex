@@ -6,7 +6,9 @@
   z-index: 1000;
 
   background: #fff;
-  width: 400px;
+  max-width: 400px;
+  width: 100%;
+  min-width: 350px;
   border-radius: 40px;
   padding: 25px;
 }
@@ -22,12 +24,88 @@
   z-index: 999;
 }
 
-@media (prefers-color-scheme: dark) {
+.modal svg {
+  width: 250px;
+  height: 175px;
+}
+
+.modal h1 {
+  font-weight: 700;
+  font-size: 24px;
+}
+
+.modal p {
+  display: block !important;
+  max-width: 250px;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.modal button {
+  height: 50px;
+  border-radius: 25px;
+  width: 100%;
+  text-align: center;
+}
+
+.modal > h1,
+.modal > * > h1 {
+  margin-top: 50px;
+}
+
+.modal > p,
+.modal > * > p {
+  margin-top: 20px;
+}
+
+.modal > svg,
+.modal > * > svg {
+  margin-top: 25px;
+}
+
+.modal > button,
+.modal > * > button {
+  margin-top: 5px;
+}
+
+.modal p a {
+  display: inline !important;
+}
+
+@media screen and (max-width: 700px) {
   .modal__wrapper {
-    background: #0088cc13;
+    overflow: hidden;
   }
 
   .modal {
-    background: #000;
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 25px 25px 0 0;
+    padding-bottom: 30px;
+    transform: none;
+    max-width: none;
   }
+
+  .modal button {
+    margin-top: 20px;
+    height: 45px;
+  }
+}
+
+/* DARK MODE */
+
+html.dark_mode .modal__wrapper {
+  background: #0088cc13;
+}
+
+html.dark_mode .modal {
+  background: #000;
+}
+
+html.dark_mode .modal p,
+html.dark_mode .modal p *:not(a) {
+  color: #838d92;
+  opacity: 1;
 }

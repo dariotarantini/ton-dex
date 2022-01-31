@@ -1,13 +1,10 @@
-# Getting Started with Create React App
+# TON DEX
 
-> Please note that only TONCOIN ~ DAI pool mocked and working
+> Please note that only `TONCOIN ~ DAI` and `TONCOIN ~ USDT` pools mocked and working
 
 ## TODO:
-- responsive markup
-- add "remove liquidity" page
-- finish pool list
+- add modal appear animation on mobile
 - add charts
-- create error modal
 
 ## Available Scripts
 

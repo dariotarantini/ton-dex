@@ -1,105 +1,81 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import { useAppSelector } from "../../store/hooks";
+import { setFrom, setFromAmount, setStartingPrice, setTo, setToAmount } from "../../store/reducers/addLiquidityReducer";
 import { selectWallet } from "../../store/reducers/walletReducers";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 
-import { getLiquidityPositions, getPopularPools } from "../../api/pool";
-import IPosition from "../../api/types/IPosition";
-import IPool from "../../api/types/IPool";
-import formatNumber from "../../utils/formatNumber";
-
-import Table from "../../components/Table/Table";
-import CoinIcon from "../../components/CoinIcon/Coinlcon";
+import Selector from "../../components/Selector/Selector";
 
 import './PoolListPage.css';
-import { Link } from "react-router-dom";
 
 export default function PoolListPage() {
   const wallet = useAppSelector(selectWallet);
 
-  const [pools, setPools] = useState<IPool[]>();
-  const [positions, setPositions] = useState<IPosition[]>();
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    (async () => {
-      if (!wallet) return;
-      try {
-        setPositions(await getLiquidityPositions());
-      } catch(e) {
-        setPositions(undefined);
-      }
-    })();
-  }, [wallet]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        setPools(await getPopularPools());
-      } catch(e) {
-        setPools(undefined);
-      }
-    })();
-  }, []);
-
-  const rows = [
-    {
-      showOnMobile: true,
-      title: 'Pool',
-      alignRight: true,
-      width: .6
-    },
-    {
-      showOnMobile: true,
-      title: 'TVL',
-      width: .2
-    },
-    {
-      showOnMobile: false,
-      title: 'Volume (24h)',
-      width: .2
+  const getTab = useCallback((path?: string) => {
+    switch (path ?? location.pathname) {
+      case '/pool/your':
+        return 0;
+      case '/pool/all':
+        return 1;
+      default:
+        return (
+          typeof wallet === 'undefined'
+            ? 1
+            : 0
+        );
     }
-  ];
+  }, [location.pathname, wallet]);
+
+  const [tab, setTab] = useState(getTab());
+
+  useEffect(() => {
+    if (location.pathname !== '/pool') return;
+
+    const path = (
+      wallet
+        ? '/pool/your'
+        : '/pool/all'
+    );
+
+    navigate(path, { replace: true });
+    setTab(getTab(path));
+
+    // eslint-disable-next-line
+  }, [location.pathname, getTab]);
+
+  useEffect(() => { setTab(getTab()); }, [location.pathname, getTab]);
 
   return (
     <div className="page page--pools">
-      <Link to="/add">ADD LIQUIDITY</Link>
-      <Link to="/pool/poolcontract1"> POOL OVERVIEW</Link>
 
-      {wallet ? (
-        <>
-          <h3>Your pools</h3>
-          <Table
-            cols={rows}
-            rows={[]}
-            defaultSorted={1}
-            pageSize={10}
-          />
-        </>
-      ) : ''}
+      <div className="pools__tabs">
+        <Selector
+          options={[
+            <Link to="/pool/your" replace={true}>Your pools</Link>,
+            <Link to="/pool/all" replace={true}>All pools</Link>,
+            <Link
+              to="/add"
+              onClick={() => {
+                dispatch(setFrom(undefined));
+                dispatch(setTo(undefined));
+                dispatch(setFromAmount(0));
+                dispatch(setToAmount(0));
+                dispatch(setStartingPrice(0));
+              }}
+            >Create</Link>
+          ]}
+          selected={tab}
+          updater={setTab}
+        />
+      </div>
 
-      {pools ? (
-        <>
-          <h3>All pools</h3>
-          <Table
-            cols={rows}
-            rows={pools.map((p, i) => [
-            { key: i, rendered: (
-                <div className="pools_list__item">
-                  <div className="pools_list_item__icon">
-                    <CoinIcon coin={p.pair.from} />
-                    <CoinIcon coin={p.pair.to} />
-                  </div>
-                  <span>{p.pair.from.ticker} ~ {p.pair.to.ticker}</span>
-                </div>
-              )},
-              { key: i, rendered: `$ ${formatNumber(p.info.tvl.value)}` },
-              { key: i, rendered: `$ ${formatNumber(p.info.volume.value)}` }
-            ])}
-            defaultSorted={1}
-            pageSize={10}
-          />
-        </>
-      ) : ''}
+      <Outlet />
+
     </div>
   )
 }

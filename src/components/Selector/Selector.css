@@ -42,19 +42,30 @@
 }
 
 .selector--animating .selector__selected {
-  transition: .25s;
+  transition: width .25s, left .25s;
 }
 
 .selector--animating .selector__option {
   transition: opacity .25s;
 }
 
-@media (prefers-color-scheme: dark) {
-  .selector__options {
-    background: #081a24;
+@media screen and (max-width: 700px) {
+  .selector__option {
+    font-size: 14px;
+    height: 26px;
   }
+  
+  .selector__option:not(.selector__option--element) {
+    padding: 1px 12px;
+  }
+}
 
-  .selector__selected {
-    background: #0b3b53;
-  }
+/* DARK MODE */
+
+html.dark_mode .selector__options {
+  background: #006ea534;
+}
+
+html.dark_mode .selector__selected {
+  background: var(--accent);
 }

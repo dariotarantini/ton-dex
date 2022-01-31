@@ -7,7 +7,7 @@ export default function CoinIcon({ coin }: { coin: ICoin | undefined }) {
     return (
       <img
         src="/coin.svg"
-        alt={coin?.ticker}
+        alt={coin ? coin.ticker : 'coin'}
         className="coin__icon"
       />
     );

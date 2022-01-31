@@ -4,17 +4,15 @@
   justify-content: flex-end;
   
   padding-right: 15px;
-  margin: 10px 0;
 
   user-select: none;
 }
 
 .transaction__info svg * {
-  stroke: #fff;
   opacity: 0.5;
 }
 
-span {
+.transaction_details span {
   font-weight: 700;
   font-size: 14px;
   line-height: 24px;

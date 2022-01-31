@@ -10,24 +10,3 @@
   opacity: 0.3;
   margin-bottom: 10px;
 }
-
-.liquidity__info {
-  flex-direction: column;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  padding: 15px;
-}
-
-.liquidity__info > *:not(:last-child) {
-  margin-bottom: 5px;
-}
-
-.liquidity_info__prop {
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.liquidity_info__prop span.title {
-  opacity: 0.5;
-}

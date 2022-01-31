@@ -44,8 +44,8 @@
   margin-left: 5px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .starting_input {
-    background: rgb(16, 19, 31);
-  }
+/* DARK MODE */
+
+html.dark_mode .starting_input {
+  background: rgb(16, 19, 31);
 }

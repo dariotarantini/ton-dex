@@ -1,21 +1,25 @@
+import type ITransaction from "../../api/types/ITransaction";
+import type ICoin from "../../api/types/ICoin";
+import type IPool from "../../api/types/IPool";
+
 import { useEffect, useState } from "react";
 
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { requestWallet, selectWallet, selectWalletLoading } from "../../store/reducers/walletReducers";
+import { useAppSelector } from "../../store/hooks";
+import { selectWallet } from "../../store/reducers/walletReducers";
 import { selectDeadline } from "../../store/reducers/settingsReducer";
 
+import useModal from "../../hooks/useModal";
 import { getPool, getPoolContract, getPriceImpact } from "../../api/pool";
 import { getCoinBalance } from "../../api/wallet";
 import { swap } from "../../api/swap";
 
-import ITransaction from "../../api/types/ITransaction";
-import ICoin from "../../api/types/ICoin";
-import IPool from "../../api/types/IPool";
-
-import TransactionDetails from "./TransactionDetails/TransactionDetails";
 import SwapConfirmation from "../../modals/SwapConfirmation/SwapConfirmation";
 import TransactionSent from "../../modals/TransactionSent/TransactionSent";
+import TransactionError from "../../modals/TransactionError/TransactionError";
+
+import TransactionDetails from "./TransactionDetails/TransactionDetails";
 import PairInput from "../PairInput/PairInput";
+import SendButton from "../SendButton/SendButton";
 
 import './SwapForm.css';
 
@@ -51,16 +55,19 @@ export default function SwapForm({
   const [reversed, setReversed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { isShowing: isTransactionFailed, toggle: toggleTransactionFailed } = useModal();
+
   const deadline = useAppSelector(selectDeadline);
   const wallet = useAppSelector(selectWallet);
-  const walletLoading = useAppSelector(selectWalletLoading);
-
-  const dispatch = useAppDispatch();
 
   const confirmTransaction = async () => {
     setLoading(true);
     setConfirmationVisible(true);
   }
+
+  useEffect(() => {
+    setReversed(pool?.pair.from.contract !== from?.contract);
+  }, [pool, from]);
 
   useEffect(() => {
     (async () => {
@@ -110,40 +117,11 @@ export default function SwapForm({
   }, [wallet, from, to]);
 
   return (
-    <div className={
-      'card border_separator' +
-      (loading ? ' swap_form--loading' : '')
-    }>
-
-      <PairInput
-        rate={pool?.pair.rate[reversed ? 'backward' : 'forward'] ?? 0}
-        reversed={reversed}
-        setReversed={setReversed}
-
-        from={from}
-        fromAmount={fromAmount}
-        fromBalance={fromBalance}
-        setFrom={setFrom}
-        setFromAmount={setFromAmount}
-
-        to={to}
-        toAmount={toAmount}
-        toBalance={toBalance}
-        setTo={setTo}
-        setToAmount={setToAmount} 
+    <>
+      <TransactionError
+        isShowing={isTransactionFailed}
+        toggle={toggleTransactionFailed}
       />
-
-      {
-        pool
-          ? (
-            <TransactionDetails
-              pool={pool}
-              reversed={reversed}
-              priceImpact={priceImpact}
-              amount={fromAmount}
-            />
-          ) : ''
-      }
 
       {transaction ? (
         <TransactionSent
@@ -152,7 +130,7 @@ export default function SwapForm({
           isShowing={typeof transaction !== 'undefined'}
           toggle={() => setTransaction(undefined)}
         />
-      ) : ''}
+      ) : null}
 
       {pool ? (
         <SwapConfirmation
@@ -181,45 +159,65 @@ export default function SwapForm({
               setFromAmount(0);
               setToAmount(0);
             } catch (e) {
-              // TODO: show error modal
               console.error(e);
+              toggleTransactionFailed(true);
+              setTransaction(undefined);
             } finally {
               setLoading(false);
               setConfirmationVisible(false);
             }
           }}
         />
-      ) : ''}
+      ) : null}
 
       <div className={
-        'action__buttons' +
-        (!pool ? ' action__buttons--no-pool' : '')
+        'card border_separator' +
+        (!pool ? ' card--no-gap' : '') +
+        (loading ? ' swap_form--loading' : '')
       }>
-        {
-          loading || walletLoading
-            ? (
-              <button className="btn btn--secondary btn--unclickable">
-                <div className="loader__circle"></div>
-                <span>Loading...</span>
-              </button>
-            ) : (
-              wallet
-                ? pool
-                  ? fromAmount > 0
-                    ? fromAmount <= (fromBalance ?? 0) 
-                      ? <button onClick={confirmTransaction}>Swap</button>
-                      : <button className="btn--secondary btn--disabled">Insufficient balance</button>
-                    : <button className="btn--secondary btn--disabled">Enter an amount</button>
-                  : <button className="btn--secondary btn--disabled">Select pair</button>
-                : (
-                  <button
-                    className="btn btn--secondary"
-                    onClick={() => dispatch(requestWallet())}
-                  >Connect Wallet</button>
-                )
-            )
-        }
+
+        <PairInput
+          rate={pool?.pair.rate[reversed ? 'backward' : 'forward'] ?? 0}
+          reversed={reversed}
+          setReversed={setReversed}
+
+          from={from}
+          fromAmount={fromAmount}
+          fromBalance={fromBalance}
+          setFrom={setFrom}
+          setFromAmount={setFromAmount}
+
+          to={to}
+          toAmount={toAmount}
+          toBalance={toBalance}
+          setTo={setTo}
+          setToAmount={setToAmount} 
+        />
+
+        {pool ? (
+          <TransactionDetails
+            pool={pool}
+            reversed={reversed}
+            priceImpact={priceImpact}
+            amount={fromAmount}
+          />
+        ) : null}
+
+        <div className={
+          'card__action_buttons' +
+          (!pool ? ' card__action_buttons--no-pool' : '')
+        }>
+          <SendButton
+            action={confirmTransaction}
+            actionText="Swap"
+            loading={loading}
+            isPoolSelected={typeof from !== 'undefined' && typeof to !== 'undefined'}
+            isPoolValid={!!pool}
+            isAmountValid={fromAmount > 0}
+            isBalanceValid={fromAmount <= (fromBalance ?? 0)}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }

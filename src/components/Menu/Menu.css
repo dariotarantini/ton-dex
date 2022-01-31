@@ -31,11 +31,20 @@
   background: rgba(239, 35, 35, 0.05);
 }
 
-@media (prefers-color-scheme: dark) {
-  .menu {
-    background: #000;
-  }
-  .menu__item:hover {
-    background: rgba(48, 55, 87, 0.2);
-  }
+/* DARK MODE */
+
+html.dark_mode .menu {
+  background: #000;
+}
+
+html.dark_mode .menu__item:hover {
+  background: rgba(48, 55, 87, 0.2);
+}
+
+html.dark_mode .menu__item--danger {
+  color: rgba(239, 35, 35, 1);
+}
+
+html.dark_mode .menu__item--danger:hover {
+  background: rgba(239, 35, 35, 0.075);
 }

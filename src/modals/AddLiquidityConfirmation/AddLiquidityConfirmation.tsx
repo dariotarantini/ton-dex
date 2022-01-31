@@ -1,6 +1,6 @@
-import { useState } from "react";
+import type IPair from "../../api/types/IPair";
 
-import IPair from "../../api/types/IPair";
+import { useState } from "react";
 
 import Modal from "../../components/Modal/Modal";
 
@@ -44,7 +44,7 @@ export default function AddLiquidityConfirmation({
       isShowing={isShowing}
       toggle={(b?: boolean) => {
         if (!b && onDecline) onDecline();
-        toggle();
+        toggle(b);
       }}
     >
       {loading ? (
@@ -53,7 +53,7 @@ export default function AddLiquidityConfirmation({
             <div className="loader__circle"></div>
           </div>
         </div>
-      ) : ''}
+      ) : null}
 
       <div className={
         'confirmation add_liquidity_confirmation' +
@@ -81,43 +81,41 @@ export default function AddLiquidityConfirmation({
         <div className="confirmation__details border_separator">
 
           <div className="confirmation__field">
-            <span className="title">{pair.from.ticker} Deposited</span>
-            <span>{stringifyNumber(amounts.from)}</span>
+            <span className="confirmation_details__title">{pair.from.ticker} Deposited</span>
+            <span>{stringifyNumber(amounts.from / (10 ** pair.from.decimals))}</span>
           </div>
 
           <div className="confirmation__field">
-            <span className="title">{pair.to.ticker} Deposited</span>
-            <span>{stringifyNumber(amounts.to)}</span>
+            <span className="confirmation_details__title">{pair.to.ticker} Deposited</span>
+            <span>{stringifyNumber(amounts.to / (10 ** pair.to.decimals))}</span>
           </div>
 
           <div className="confirmation__field">
-            <span className="title">{pair.from.ticker} Rate</span>
-            <span>{stringifyNumber(pair.rate.forward)}</span>
+            <span className="confirmation_details__title">{pair.from.ticker} Price</span>
+            <span>{stringifyNumber(pair.rate.forward)} {pair.to.ticker}</span>
           </div>
 
           <div className="confirmation__field">
-            <span className="title">{pair.to.ticker} Rate</span>
-            <span>{stringifyNumber(pair.rate.backward)}</span>
+            <span className="confirmation_details__title">{pair.to.ticker} Price</span>
+            <span>{stringifyNumber(pair.rate.backward)} {pair.from.ticker}</span>
           </div>
 
           {share ? (
             <div className="confirmation__field">
-              <span className="title">Share of pool</span>
+              <span className="confirmation_details__title">Share of pool</span>
               <span>{stringifyPercentage(share.percentage)}%</span>
             </div>
-          ) : ''}
+          ) : null}
 
         </div>
 
-        <div className="confirmation__buttons">
-          <button
-            onClick={async () => {
-              setLoading(true);
-              if (onConfirm) await onConfirm();
-              setLoading(false);
-            }}
-          >Confirm</button>
-        </div>
+        <button
+          onClick={async () => {
+            setLoading(true);
+            if (onConfirm) await onConfirm();
+            setLoading(false);
+          }}
+        >Confirm</button>
       </div>
     </Modal>
   );

@@ -1,12 +1,14 @@
+import type ICoin from "../../api/types/ICoin";
+
 import { ChangeEventHandler } from 'react';
 
-import { ReactComponent as Arrow } from '../../assets/icons/arrow_bold.svg';
-
-import ICoin from "../../api/types/ICoin";
-
+import stringifyNumber from '../../utils/stringifyNumber';
 import useModal from '../../hooks/useModal';
+
 import CoinIcon from "../CoinIcon/Coinlcon";
 import CoinSelector from '../../modals/CoinSelector/CoinSelector';
+
+import { ReactComponent as Arrow } from '../../assets/icons/arrow_bold.svg';
 
 import './CoinInput.css';
 
@@ -30,8 +32,9 @@ export default function CoinInput({
   const { isShowing, toggle } = useModal();
 
   const update: ChangeEventHandler = e => {
+    if (!coin) return;
     const pval = parseFloat((e.target as HTMLInputElement).value);
-		setAmount(isNaN(pval) ? 0 : pval);
+		setAmount(isNaN(pval) ? 0 : pval * (10 ** coin.decimals));
   };
 
   return (
@@ -62,8 +65,8 @@ export default function CoinInput({
 
           {
             balance !== undefined
-              ? <span onClick={() => setAmount(balance)}>Balance: {balance}</span>
-              : ''
+              ? <span onClick={() => setAmount(balance)}>Balance: {balance / (10 ** (coin?.decimals ?? 1))}</span>
+              : null
           }
 
         </div>
@@ -71,7 +74,7 @@ export default function CoinInput({
         <input
           type="number"
           placeholder="0"
-          value={amount}
+          value={amount ? +stringifyNumber(amount / (10 ** (coin?.decimals ?? 1))) : ''}
           onChange={update}
         />
 

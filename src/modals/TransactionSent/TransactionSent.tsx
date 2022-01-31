@@ -21,22 +21,22 @@ export default function TransactionSent({ isShowing, rate, toggle, transaction }
       case TransactionType.SWAP:
         return (
           <p>Swapping <span>{
-            stringifyNumber(transaction.amount)
+            stringifyNumber(transaction.amount / (10 ** transaction.pair.from.decimals))
           } {
             transaction.pair.from.ticker
           }</span> for <span>{
-            typeof rate !== 'undefined' ? stringifyNumber(transaction.amount * rate) : ''
+            typeof rate !== 'undefined' ? stringifyNumber(transaction.amount * rate / (10 ** transaction.pair.to.decimals)) : null
           } {
             transaction.pair.to.ticker
-          }</span></p>
+          }.</span></p>
         );
       case TransactionType.ADD_LIQUIDITY:
         return (
-          <p>Add liquidity for {transaction.pair.from.ticker} ~ {transaction.pair.to.ticker}</p>
+          <p>Add liquidity for <span>{transaction.pair.from.ticker} ~ {transaction.pair.to.ticker}</span> pool.</p>
         );
       case TransactionType.REMOVE_LIQUIDITY:
         return (
-          <p>Remove liquidity from {transaction.pair.from.ticker} ~ {transaction.pair.to.ticker}</p>
+          <p>Remove liquidity from <span>{transaction.pair.from.ticker} ~ {transaction.pair.to.ticker}</span> pool.</p>
         );
     }
   }

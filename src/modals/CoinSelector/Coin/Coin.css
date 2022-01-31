@@ -48,13 +48,13 @@
   line-height: 24px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .modal_coin_selector__suggestion:not(.modal_coin_selector__suggestion--selected) {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-  }
+/* DARK MODE */
 
-  .modal_coin_selector__suggestion--selected {
-    background: rgba(0, 136, 204, 0.25);
-  }
+html.dark_mode .modal_coin_selector__suggestion:not(.modal_coin_selector__suggestion--selected) {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+}
+
+html.dark_mode .modal_coin_selector__suggestion--selected {
+  background: rgba(0, 136, 204, 0.25);
 }

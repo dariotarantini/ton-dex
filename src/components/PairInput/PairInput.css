@@ -64,25 +64,25 @@
   fill: #c4c4c4;
 }
 
-@media (prefers-color-scheme: dark) {
-  .pair_input__arrow {
-    border-color: rgb(6, 7, 12);
-    background: rgb(16, 19, 31);
-  }
+/* DARK MODE */
 
-  .pair_input__arrow_wrapper::after {
-    background: rgb(10, 11, 19);
-  }
+html.dark_mode .pair_input__arrow {
+  border-color: rgb(6, 7, 12);
+  background: rgb(16, 19, 31);
+}
 
-  .pair_input__arrow_wrapper::before {
-    border-color: rgb(10, 11, 19);
-  }
+html.dark_mode .pair_input__arrow_wrapper::after {
+  background: rgb(10, 11, 19);
+}
 
-  .pair_input__arrow svg * {
-    fill: rgb(37, 47, 87);
-  }
-  
-  .pair_input__arrow:hover svg * {
-    fill: rgb(42, 55, 105);
-  }
+html.dark_mode .pair_input__arrow_wrapper::before {
+  border-color: rgb(10, 11, 19);
+}
+
+html.dark_mode .pair_input__arrow svg * {
+  fill: rgb(37, 47, 87);
+}
+
+html.dark_mode .pair_input__arrow:hover svg * {
+  fill: rgb(42, 55, 105);
 }

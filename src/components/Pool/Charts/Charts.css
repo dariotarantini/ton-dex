@@ -4,6 +4,7 @@
 
 .pool__chart_selector {
   flex-direction: column;
+  gap: 20px;
 }
 
 .pool__chart {
@@ -11,4 +12,24 @@
   margin-left: 20px;
   border-radius: 20px;
   padding: 20px;
+}
+
+@media screen and (max-width: 700px) {
+  .pool__charts {
+    flex-direction: column-reverse;  
+  }
+
+  .pool__chart {
+    flex: auto;
+    margin: 0;
+    height: 40vh;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 15px;
+  }
+
+  .pool__chart_selector {
+    flex-direction: row;
+    gap: 10px;
+  }
 }

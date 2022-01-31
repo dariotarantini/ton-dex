@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { requestWallet, disconnectWallet, selectWallet, selectWalletLoading } from "../../store/reducers/walletReducers";
+import { connectWallet, disconnectWallet, selectWallet, selectWalletLoading } from "../../store/reducers/walletReducers";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-
-import { ReactComponent as Logo } from "../../assets/icons/logo.svg";
 
 import Menu from "../Menu/Menu";
 
@@ -12,9 +10,11 @@ import './Header.css';
 
 const trim = (address: string) => `${address.slice(0, 6)}...${address.slice(-5)}`;
 
+let hideTimeout: NodeJS.Timeout;
+
 export default function Header() {
   const location = useLocation();
-  const navifate = useNavigate();
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
@@ -23,13 +23,11 @@ export default function Header() {
 
   const [isAddressMenuVisible, setAddressMenuVisible] = useState<boolean>(false);
 
-  let hideTimeout: NodeJS.Timeout;
-
   const addressMenuItems = [
     {
       title: 'Transactions',
       action: () => {
-        navifate('/transactions');
+        navigate('/transactions');
         setAddressMenuVisible(false);
       }
     },
@@ -47,17 +45,28 @@ export default function Header() {
     <header>
 
       <Link to="/" className="header__logo">
-        <Logo />
+        <img src="/logo.svg" alt="TON DEX" />
         <span>TON DEX</span>
       </Link>
 
-      <div className="header__nav">
+      <nav className="header__nav">
+
+        <div id="nav__desktop" className="header__buttons">
+          <Link to="/">
+            <button className="btn--trinary">Swap</button>
+          </Link>
+          <Link to={wallet ? '/pool/your' : '/pool/all'}>
+            <button className="btn--trinary">Pool</button>
+          </Link>
+        </div>
+
+        <div id="nav__mobile" className="header__buttons header__buttons--mobile">
         {
           (
             location.pathname === '/'
             || location.pathname === '/settings'
           ) ? (
-              <Link to="/pool">
+              <Link to={wallet ? '/pool/your' : '/pool/all'}>
                 <button className="btn--trinary">Pool</button>
               </Link>
             ) : (
@@ -66,17 +75,25 @@ export default function Header() {
               </Link>
             )
         }
+        </div>
+
         {
           wallet ? (
             <div className="address_menu">
+
               <button
                 className="btn btn--secondary btn--unclickable"
+                onTouchStart={() => {
+                  clearTimeout(hideTimeout);
+                  setAddressMenuVisible(true);
+                }}
                 onMouseEnter={() => {
                   clearTimeout(hideTimeout);
                   setAddressMenuVisible(true);
                 }}
                 onMouseLeave={() => hideTimeout = setTimeout(() => setAddressMenuVisible(false), 10)}
-              >{trim(wallet.address ?? '')}</button>
+              >{trim(wallet.address)}</button>
+
               {isAddressMenuVisible ? (
                 <div
                   className="address_menu__wrapper"
@@ -97,11 +114,11 @@ export default function Header() {
                 <span>Loading...</span>
               </button>
             ) : (
-              <button onClick={() => dispatch(requestWallet())}>Connect Wallet</button>
+              <button onClick={() => dispatch(connectWallet())}>Connect Wallet</button>
             )
           )
         }
-      </div>
+      </nav>
 
     </header>
   );

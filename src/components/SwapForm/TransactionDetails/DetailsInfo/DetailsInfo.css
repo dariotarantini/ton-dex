@@ -40,8 +40,8 @@
   opacity: 0.5;
 }
 
-@media (prefers-color-scheme: dark) {
-  .transaction_details__info {
-    background: #000;
-  }
+/* DARK MODE */
+
+html.dark_mode .transaction_details__info {
+  background: #000;
 }

@@ -3,7 +3,7 @@
   pointer-events: none;
 }
 
-.swap_form--loading > *:not(.action__buttons) {
+.swap_form--loading > *:not(.card__action_buttons) {
   opacity: 0.7;
 }
 
