@@ -1,6 +1,6 @@
 # TON DEX
 
-> Please note that only `TONCOIN ~ DAI` and `TONCOIN ~ USDT` pools mocked and working
+> Please note that only `TON ~ DAI` and `TON ~ USDT` pools mocked and working
 
 ## TODO:
 - add modal appear animation on mobile

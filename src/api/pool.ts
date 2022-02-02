@@ -94,7 +94,7 @@ export async function getPool(contract: string): Promise<IPool> {
           backward: 1 / 3.74
         },
         from: {
-          ticker: 'TONCOIN',
+          ticker: 'TON',
           icon: '',
           decimals: 9,
           contract: 'toncoin'
@@ -136,7 +136,7 @@ export async function getPool(contract: string): Promise<IPool> {
         backward: 1 / 3.75
       },
       from: {
-        ticker: 'TONCOIN',
+        ticker: 'TON',
         icon: '',
         decimals: 9,
         contract: 'toncoin'
@@ -188,7 +188,7 @@ export async function getLatestPoolTransactions(pool: IPool, count: number = 500
         },
         from: {
           icon: '',
-          ticker: 'TONCOIN',
+          ticker: 'TON',
           decimals: 9,
           contract: 'toncoin'
         },
@@ -269,7 +269,7 @@ export async function addLiquidity(contract: string, amounts: { from: number, to
         backward: 1 / 3.75
       },
       from: {
-        ticker: 'TONCOIN',
+        ticker: 'TON',
         icon: '',
         decimals: 9,
         contract: 'toncoin'
@@ -325,7 +325,7 @@ export async function getLiquidityPositions(): Promise<IPosition[]> {
   const p = {
     pair: {
       from: {
-        ticker: 'TONCOIN',
+        ticker: 'TON',
         icon: '',
         decimals: 9,
         contract: 'toncoin'

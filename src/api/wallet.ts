@@ -25,7 +25,7 @@ provider?.on('accountsChanged', (accounts: string[]) => {
 
 /**
  * @async
- * @returns {number} TONCOIN balance
+ * @returns {number} TON balance
  */
 async function getBalance(): Promise<number> {
   if (!store.getState().wallet.wallet) throw new Error('wallet not found');
@@ -131,7 +131,7 @@ export async function getLatestWalletTransactions(count: number = 500): Promise<
         },
         from: {
           icon: '',
-          ticker: 'TONCOIN',
+          ticker: 'TON',
           decimals: 9,
           contract: 'toncoin'
         },

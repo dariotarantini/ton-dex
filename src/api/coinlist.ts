@@ -14,7 +14,7 @@ export async function getCoinList(url: string): Promise<ICoinList> {
     url: '',
     coins: [
       {
-        ticker: 'TONCOIN',
+        ticker: 'TON',
         icon: '',
         decimals: 9,
         contract: 'toncoin'
@@ -56,7 +56,7 @@ export async function getCoinList(url: string): Promise<ICoinList> {
 export async function getSuggestions(): Promise<ICoin[]> {
   return [
     {
-      ticker: 'TONCOIN',
+      ticker: 'TON',
       icon: '',
         decimals: 9,
         contract: 'toncoin'
